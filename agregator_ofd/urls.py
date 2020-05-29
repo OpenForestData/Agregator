@@ -13,9 +13,6 @@ Root paths for all applications
 """
 
 main_url_patterns = [
-    # /admin
-    # Django admin - users, permissions and groups management
-    path('admin/', admin.site.urls),
     # Django core functions, and security, JWT, auth
     path('api/v1/core/', include('core.urls', namespace='core'))
 ]

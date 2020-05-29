@@ -101,10 +101,10 @@ USE_L10N = True
 USE_TZ = True
 
 # Statics
-STATIC_URL = '/static/'
+STATIC_URL = '/static-agregator/'
 
 # Media
-MEDIA_URL = '/media/'
+MEDIA_URL = '/media-agregator/'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
