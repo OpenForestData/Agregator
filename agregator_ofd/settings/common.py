@@ -27,13 +27,13 @@ BASE_APPS = [
     'django.contrib.staticfiles',
     # not standard django apps
     # swagger - generating html views fro backend
-    'drf_yasg'
-
+    'drf_yasg',
 ]
 
 # local apps in this project
 ADDITIONAL_APPS = [
     'core',
+    'api'
 ]
 
 # installed apps separated to apps from libs, and locally created ones
