@@ -18,7 +18,7 @@ class BackendCmsRepository:
         """
         Method responsible for obtaining facet fields names
         """
-        facet_list = requests.get(self.host + '/cms-api/v1/facet-list')
+        facet_list = requests.get(self.host + '/pl/cms-api/v1/facet-list')
         try:
             facet_list_json = json.loads(facet_list.text)
             return {field['facet_field_name']: field['facet_field_friendly_name'] for field in facet_list_json}
@@ -33,5 +33,5 @@ class BackendCmsRepository:
         return {}
 
     def get_menu(self) -> dict:
-        menu_data = requests.get(self.host + 'cms-/api/global-data')
+        menu_data = requests.get(self.host + '/pl/cms-api/global-data')
         return {}
