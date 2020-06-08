@@ -115,3 +115,9 @@ AUTH_USER_MODEL = 'core.CustomUser'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
+
+DATAVERSE_URL = "http://192.168.1.241:8080"
+SOLR_COLLECTION_URL = "http://192.168.1.241:8985/solr/collection1"
+
+
+BACKEND_CMS_URL = "http://localhost:9999"

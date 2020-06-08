@@ -1,3 +1,27 @@
+from django.http import JsonResponse
 from django.shortcuts import render
+from rest_framework.views import APIView
 
-# Create your views here.
+from backend_cms_repository.backend_cms_repository import BackendCmsRepository
+from dataverse_repository.dataverse_repository import DataverseRepository
+
+
+class SearchView(APIView):
+    """
+    Basic view for search handling
+    """
+    permission_classes = ()
+
+    def get(self, request):
+        dataverse_repository = DataverseRepository()
+        search_response = dataverse_repository.search(request.query_params)
+        details_data = dataverse_repository.get_datasets_based_on_identifier_list(
+            [result['identifier'] for result in search_response['results']])
+        backend_cms_repository = BackendCmsRepository()
+
+        response = {
+            'list': search_response,
+            'details': details_data,
+            'global_data': backend_cms_repository.get_global_data()
+        }
+        return JsonResponse(response)

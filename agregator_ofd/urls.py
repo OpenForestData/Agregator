@@ -13,8 +13,8 @@ Root paths for all applications
 """
 
 main_url_patterns = [
-    # Django core functions, and security, JWT, auth
-    path('api/v1/core/', include('core.urls', namespace='core'))
+    # api for dataverse
+    path('api/v1/', include('api.urls', namespace='api'))
 ]
 
 """
