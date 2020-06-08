@@ -22,6 +22,7 @@ class BackendCmsRepository:
         url = self.host + '/pl/cms-api/v1/facet-list'
         print(f"URL FACET LIST: {url}")
         facet_list = requests.get(url)
+        print(facet_list)
         try:
             facet_list_json = json.loads(facet_list.text)
             return {field['facet_field_name']: field['facet_field_friendly_name'] for field in facet_list_json}
