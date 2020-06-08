@@ -28,6 +28,7 @@ BASE_APPS = [
     # not standard django apps
     # swagger - generating html views fro backend
     'drf_yasg',
+    'corsheaders'
 ]
 
 # local apps in this project
@@ -40,6 +41,8 @@ ADDITIONAL_APPS = [
 INSTALLED_APPS = BASE_APPS + ADDITIONAL_APPS
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -124,3 +127,5 @@ print(SOLR_COLLECTION_URL)
 
 BACKEND_CMS_URL = os.environ.get("BACKEND_CMS_URL")
 print(BACKEND_CMS_URL)
+
+CORS_ORIGIN_ALLOW_ALL = True
