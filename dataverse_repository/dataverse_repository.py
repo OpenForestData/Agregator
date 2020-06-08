@@ -55,10 +55,8 @@ class DataverseRepository:
         """
         # ensure params are in proper format
         query, params = self.__prepare_params(params)
-        # facet_fields_data = self.__backend_cms_repository.get_facet_fields_list()
+        facet_fields_data = self.__backend_cms_repository.get_facet_fields_list()
         # get search params from backend cms
-        facet_fields_data = {'language': 'Język', 'isHarvested': 'Pochodzi od harvestera',
-                             'publicationDate': 'Data publikacji'}
         search_params = {'facet.field': list(facet_fields_data.keys())}
         # update query based on data send by front
         search_params.update(**params)
