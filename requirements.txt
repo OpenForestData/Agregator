@@ -20,7 +20,9 @@ packaging==20.4
 pluggy==0.13.1
 psycopg2==2.8.5
 py==1.8.1
+pyDataverse @ git+https://gitlab.whiteaster.com/public_data/pydataverse-upgrade.git@92e0f0c4d6d45025d2871ea7a315a2477e4331b6
 pyparsing==2.4.7
+pysolr==3.9.0
 pytest==5.4.2
 pytz==2020.1
 requests==2.23.0
@@ -32,4 +34,3 @@ uritemplate==3.0.1
 urllib3==1.25.9
 wcwidth==0.1.9
 zipp==3.1.0
-pyDatavers@ git+https://gitlab.whiteaster.com/public_data/pydataverse-upgrade.git
