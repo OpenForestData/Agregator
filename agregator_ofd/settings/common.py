@@ -116,8 +116,6 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-DATAVERSE_URL = "http://192.168.1.241:8080"
-SOLR_COLLECTION_URL = "http://192.168.1.241:8985/solr/collection1"
-
-
-BACKEND_CMS_URL = "http://localhost:9999"
+DATAVERSE_URL = os.environ.get("DATAVERSE_URL")
+SOLR_COLLECTION_URL = os.environ.get("SOLR_COLLECTION_URL")
+BACKEND_CMS_URL = os.environ.get("BACKEND_CMS_URL")

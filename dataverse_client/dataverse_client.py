@@ -78,17 +78,3 @@ class DataverseClient:
             # TODO: add exceptions for each type of error
             response = DataverseClientSearchResponse(False)
         return response
-
-
-if __name__ == "__main__":
-    repository = DataverseClient(Api("http://192.168.1.241:8080"),
-                                 pysolr.Solr('http://192.168.1.241:8985/solr/collection1'))
-    params = {
-        'facet.field': ['publicationDate', 'language']
-    }
-    search_finish = repository.search(params=params)
-    olo = search_finish.result
-
-    doi = search_finish.data.docs[0]['identifier']
-
-    print(repository.get_dataset_details(doi))

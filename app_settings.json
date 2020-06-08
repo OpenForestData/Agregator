@@ -1,6 +1,6 @@
 {
   "PRODUCTION": false,
-  "BACKEND_CMS_URL": "localhost:9999",
+  "BACKEND_CMS_URL": "http://localhost:9999",
   "DATAVERSE_URL": "http://192.168.1.241:8080",
   "SOLR_COLLECTION_URL": "http://192.168.1.241:8985/solr/collection1"
 }

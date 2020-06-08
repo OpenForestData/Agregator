@@ -15,7 +15,7 @@ class SearchView(APIView):
     def get(self, request):
         dataverse_repository = DataverseRepository()
         search_response = dataverse_repository.search(request.query_params)
-        details_data = dataverse_repository.get_datasets_based_on_identifier_list(
+        details_data = dataverse_repository.get_datasets_details_based_on_identifier_list(
             [result['identifier'] for result in search_response['results']])
         backend_cms_repository = BackendCmsRepository()
 

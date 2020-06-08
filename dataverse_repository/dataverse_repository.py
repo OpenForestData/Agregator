@@ -55,25 +55,29 @@ class DataverseRepository:
         """
         # ensure params are in proper format
         query, params = self.__prepare_params(params)
-        facet_fields_data = self.__backend_cms_repository.get_facet_fields_list()
+        # facet_fields_data = self.__backend_cms_repository.get_facet_fields_list()
         # get search params from backend cms
+        facet_fields_data = {'language': 'Język', 'isHarvested': 'Pochodzi od harvestera',
+                             'publicationDate': 'Data publikacji'}
         search_params = {'facet.field': list(facet_fields_data.keys())}
         # update query based on data send by front
         search_params.update(**params)
         response = {}
         dataverse_client_response = self.__client.search(query, search_params)
-        response['available_filter_fields'] = dataverse_client_response.facet_fields_values
+        facet_fields_values = dataverse_client_response.facet_fields_values
+        for key, value in facet_fields_values.items():
+            value['friendly_name'] = facet_fields_data[key]
+        response['available_filter_fields'] = facet_fields_values
         response['results'] = dataverse_client_response.result
-        response['facet_translations'] = facet_fields_data
         return response
 
     def get_dataset_details(self, identifier: str) -> dict:
         """
-        Method responsible for getting dataset details (uses dataverse api)
+        Method responsible for getting dataset details (uses dataverse api client)
         """
         return self.__client.get_dataset_details(identifier).json_data
 
-    def get_datasets_based_on_identifier_list(self, identifiers_list: list) -> dict:
+    def get_datasets_details_based_on_identifier_list(self, identifiers_list: list) -> dict:
         """
         Method responsible for getting dataset details for search
         """
