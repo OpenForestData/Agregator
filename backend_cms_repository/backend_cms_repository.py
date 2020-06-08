@@ -18,7 +18,9 @@ class BackendCmsRepository:
         """
         Method responsible for obtaining facet fields names
         """
-        facet_list = requests.get(self.host + '/pl/cms-api/v1/facet-list')
+
+        url = self.host + '/pl/cms-api/v1/facet-list'
+        facet_list = requests.get(url)
         try:
             facet_list_json = json.loads(facet_list.text)
             return {field['facet_field_name']: field['facet_field_friendly_name'] for field in facet_list_json}
