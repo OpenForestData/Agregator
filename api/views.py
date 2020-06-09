@@ -17,11 +17,11 @@ class SearchView(APIView):
         search_response = dataverse_repository.search(request.query_params)
         details_data = dataverse_repository.get_datasets_details_based_on_identifier_list(
             [result['identifier'] for result in search_response['results']])
+        for result in search_response['results']:
+            result['details'] = details_data[result['identifier']]
         backend_cms_repository = BackendCmsRepository()
-
         response = {
             'list': search_response,
-            'details': details_data,
             'global_data': backend_cms_repository.get_global_data()
         }
         return JsonResponse(response)
