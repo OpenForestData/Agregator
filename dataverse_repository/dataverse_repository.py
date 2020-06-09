@@ -44,6 +44,10 @@ class DataverseRepository:
             final_params['rows'] = [params['rows']]
             params.pop('rows')
 
+        if 'category' in params:
+            params['identifierOfDataverse'] = params['category']
+            params.pop('category')
+
         for key, values in params.items():
             new_fquery = f"{key}:{' OR '.join([value for value in params.getlist(key)])}"
             final_params['fq'].append(new_fquery)
@@ -83,3 +87,19 @@ class DataverseRepository:
         for identifier in identifiers_list:
             response[identifier] = self.get_dataset_details(identifier)
         return response
+
+    def get_all_categories(self) -> list:
+        """
+        Method responsible for getting all dataverses - treated as categories
+        in agregator based on solr searh query
+        """
+        categories = []
+        response_from_solr_search = self.__client.search(
+            params={'fq': ["dvObjectType:dataverses"], 'start': ['1'], 'rows': ['15']})
+        for dataverse in response_from_solr_search.result:
+            categories.append({
+                'id': dataverse['id'],
+                'friendly_name': dataverse['name'],
+                'name': dataverse['identifier'],
+            })
+        return categories

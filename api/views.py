@@ -14,11 +14,13 @@ class SearchView(APIView):
 
     def get(self, request):
         dataverse_repository = DataverseRepository()
+
         search_response = dataverse_repository.search(request.query_params)
         details_data = dataverse_repository.get_datasets_details_based_on_identifier_list(
             [result['identifier'] for result in search_response['results']])
         for result in search_response['results']:
             result['details'] = details_data[result['identifier']]
+        search_response['available_filter_fields']['category'] = dataverse_repository.get_all_categories()
         backend_cms_repository = BackendCmsRepository()
         response = {
             'list': search_response,
