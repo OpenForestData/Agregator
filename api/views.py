@@ -21,7 +21,7 @@ class SearchView(APIView):
 
         backend_cms_repository = BackendCmsRepository()
         backend_cms_repository.populate_categories_fields_list(dataverse_repository.get_all_categories())
-        search_response['available_filter_fields']['category'] = backend_cms_repository.get_categories_fields_list()
+        search_response['available_filter_fields']['category'] = dataverse_repository.get_all_categories()
 
         response = {
             'list': search_response,
