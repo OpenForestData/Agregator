@@ -77,7 +77,8 @@ class DataverseRepository:
         """
         Method responsible for getting dataset details (uses dataverse api client)
         """
-        return self.__client.get_dataset_details(identifier).json_data
+        dataset = self.__client.get_dataset_details(identifier)
+        return dataset.json_data if dataset.is_success else {}
 
     def get_datasets_details_based_on_identifier_list(self, identifiers_list: list) -> dict:
         """

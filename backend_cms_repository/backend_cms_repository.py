@@ -20,9 +20,7 @@ class BackendCmsRepository:
         """
 
         url = self.host + '/pl/cms-api/v1/facet-list'
-        print(f"URL FACET LIST: {url}")
         facet_list = requests.get(url)
-        print(facet_list)
         try:
             facet_list_json = json.loads(facet_list.text)
             return {field['facet_field_name']: field['facet_field_friendly_name'] for field in facet_list_json}
@@ -38,5 +36,23 @@ class BackendCmsRepository:
         return {}
 
     def get_menu(self) -> dict:
+        """
+        Method responsible for getting menu structure
+        """
         menu_data = requests.get(self.host + '/pl/cms-api/global-data')
         return {}
+
+    def populate_categories_fields_list(self, categories_fields_list: list) -> list:
+        """
+        Method responsible for populating categories and obtain
+        actual categories sets
+        """
+        populated_categories_list = []
+        url = self.host + '/pl/cms-api/populate-categories-fields-list'
+        response = requests.post(url, data={'categories_fields_list': categories_fields_list})
+        return []
+
+    def get_categories_fields_list(self):
+        url = self.host + '/pl/cms-api/get-categories-fields-list'
+        response = requests.get(url)
+        return ""
