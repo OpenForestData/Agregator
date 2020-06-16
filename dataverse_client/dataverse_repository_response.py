@@ -18,6 +18,14 @@ class DataverseClientResponse:
     def data(self):
         return self.__dataverse_data
 
+    def get_data(self):
+        try:
+            data = json.loads(self.data.text)['data']
+        except Exception as ex:
+            # TODO: add exception handler
+            data = {}
+        return data
+
 
 class DataverseClientSearchResponse(DataverseClientResponse):
     """
@@ -71,6 +79,18 @@ class DataverseDetailDatasetClientResponse(DataverseClientResponse):
     @property
     def json_data(self):
         try:
-            return json.loads(self.data)
+            return json.loads(self.data)['data']
+        except Exception:
+            return {}
+
+
+class DataverseDataFileMetadataResponse(DataverseClientResponse):
+    """
+    Class responsible for handling dataverse dataile details response
+    """
+
+    def get_data(self):
+        try:
+            return json.loads(self.data.text)
         except Exception:
             return {}

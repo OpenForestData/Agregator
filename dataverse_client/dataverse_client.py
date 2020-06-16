@@ -2,8 +2,10 @@ import requests
 from pyDataverse.api import Api
 import pysolr
 
+from agregator_ofd.settings.common import DATAVERSE_URL
 from dataverse_client.dataverse_repository_response import DataverseClientResponse, \
-    DataverseClientSearchResponse, DataverseDetailDatasetClientResponse
+    DataverseClientSearchResponse, DataverseDetailDatasetClientResponse, \
+    DataverseDataFileMetadataResponse
 from dataverse_client.exceptions import DataverseClientConnectionException
 
 
@@ -78,3 +80,41 @@ class DataverseClient:
             # TODO: add exceptions for each type of error
             response = DataverseClientSearchResponse(False)
         return response
+
+    def get_metadata_blocks(self) -> DataverseClientResponse:
+        """
+        Method responsible for obtaining dataverse
+        metadata fields collections
+        """
+        try:
+            response_from_dataverse = self.__dataverse_client.get_metadatablocks()
+            response = DataverseClientResponse(True, response_from_dataverse)
+        except Exception:
+            # TODO: handle exception
+            response = DataverseClientResponse(False)
+        return response
+
+    def get_metadata_details_for_block(self, identifier: str) -> DataverseClientResponse:
+        """
+        Method to get details metadata attributes for block,
+        based on name
+        """
+        try:
+            response_from_dataverse = self.__dataverse_client.get_metadatablock(identifier)
+            response = DataverseClientResponse(True, response_from_dataverse)
+        except Exception:
+            # TODO: handle exception
+            response = DataverseClientResponse(False)
+        return response
+
+    def get_datafile_metadata(self, datafile_id: str) -> DataverseDataFileMetadataResponse:
+        """
+        Method responsible for obtaining data about datafile based
+        on it's id.
+        """
+        dataverse_response = requests.get(DATAVERSE_URL + f'/api/files/{datafile_id}/metadata')
+        return DataverseDataFileMetadataResponse(True,
+                                                 dataverse_response) if dataverse_response.status_code == 200 else DataverseDataFileMetadataResponse(
+            False)
+
+    # def get_datafile(self, datafile_id: str) ->:

@@ -48,11 +48,16 @@ class BackendCmsRepository:
         actual categories sets
         """
         populated_categories_list = []
-        url = self.host + '/pl/cms-api/populate-categories-fields-list'
+        url = self.host + '/pl/cms-api/populate-categories-fields-list/'
         response = requests.post(url, data={'categories_fields_list': categories_fields_list})
         return []
 
     def get_categories_fields_list(self):
-        url = self.host + '/pl/cms-api/get-categories-fields-list'
+        url = self.host + '/pl/cms-api/get-categories-fields-list/'
         response = requests.get(url)
         return ""
+
+    def register_metadata_blocks(self, metadata_blocs_list) -> bool:
+        url = self.host + '/pl/cms-api/register-metadata-blocks'
+        response = requests.post(url, data=metadata_blocs_list)
+        return True if response.status_code == 200 else False

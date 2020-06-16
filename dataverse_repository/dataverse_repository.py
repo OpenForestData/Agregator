@@ -1,3 +1,5 @@
+import json
+
 import pysolr
 from pyDataverse.api import Api
 
@@ -16,6 +18,7 @@ class DataverseRepository:
                                         pysolr.Solr(SOLR_COLLECTION_URL))
         # TODO should be as param, when redis will be available
         self.__backend_cms_repository = BackendCmsRepository()
+        self.get_all_metadata_blocks_details()
 
     def __prepare_params(self, params: dict) -> (str, dict):
         """
@@ -60,6 +63,7 @@ class DataverseRepository:
         # ensure params are in proper format
         query, params = self.__prepare_params(params)
         facet_fields_data = self.__backend_cms_repository.get_facet_fields_list()
+        # TODO get out as param facet_fields_list
         # get search params from backend cms
         search_params = {'facet.field': list(facet_fields_data.keys())}
         # update query based on data send by front
@@ -104,3 +108,30 @@ class DataverseRepository:
                 'name': dataverse['identifier'],
             })
         return categories
+
+    def get_all_metadata_blocks_details(self) -> dict:
+        """
+        Method to get full list of metadata blocks and their attributes
+        """
+        metadata_blocks = {}
+        metadata_blocks_response = self.__client.get_metadata_blocks()
+        if metadata_blocks_response.is_success:
+            all_metadata_blocks = metadata_blocks_response.get_data()
+            for metadata_block in all_metadata_blocks:
+                metadata_blocks[metadata_block['name']] = self.__client.get_metadata_details_for_block(
+                    metadata_block['name']).get_data()
+        return metadata_blocks
+
+    def get_resource(self, identifier_id: str) -> dict:
+        response = self.__client.get_datafile_metadata(identifier_id)
+        if response.is_success:
+            data = response.get_data()
+        else:
+            data = {}
+        return data
+
+    def get_resources(self, identifiers_list: list) -> dict:
+        pass
+
+    def get_url_to_file(self, file_id: int) -> str:
+        return f'{DATAVERSE_URL}/api/access/datafile/{file_id}'

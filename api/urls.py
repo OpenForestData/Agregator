@@ -13,4 +13,6 @@ urlpatterns = [
     path('search', api_views.SearchView.as_view(), name='search'),
     # /api/v1/datasets/details-view
     path('datasets', api_views.DatasetDetailsView.as_view(), name='datasets'),
+    # /api/v1/resource/123456
+    path('resource/<str:identifier_id>', api_views.ResourceView.as_view(), name='resource'),
 ]

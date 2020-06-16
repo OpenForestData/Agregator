@@ -131,3 +131,19 @@ print(BACKEND_CMS_URL)
 CORS_ORIGIN_ALLOW_ALL = True
 
 DATASET_DETAILS_MAX_RESULTS_AMOUNT = os.environ.get("DATASET_DETAILS_MAX_RESULTS_AMOUNT")
+
+IMG_PROXY_SALT = os.environ.get('IMG_PROXY_SALT')
+IMG_PROXY_KEY = os.environ.get('IMG_PROXY_KEY')
+
+IMG_PROXY_URL = os.environ.get('IMG_PROXY_URL')
+
+IMG_PROXY_AVAILABLE_PARAMS = {
+    'resize': [
+        'fit', 'fill', 'crop', 'force'
+    ],
+    'extensions': [
+        'jpg', 'png', 'webp'
+    ]
+}
+
+IMG_PROXY_THUMBNAILS_CREATION_MIME_TYPES = ['image/png', 'image/jpeg', 'image/tiff']
