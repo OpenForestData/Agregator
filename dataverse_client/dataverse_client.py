@@ -9,6 +9,9 @@ from dataverse_client.dataverse_repository_response import DataverseClientRespon
 from dataverse_client.exceptions import DataverseClientConnectionException
 
 
+# TODO add loggers
+
+
 class DataverseClient:
     """
     Repository pattern class to get each data from single dataverse instance
@@ -60,11 +63,11 @@ class DataverseClient:
         }
 
         if params:
-            # TODO this looks bad refactor needed - how to check if list is of strings?
+            # TODO: Optimalization required
             for key, search_params in params.items():
+                if key not in search_query:
+                    search_query[key] = []
                 if isinstance(search_params, list):
-                    if key not in search_query:
-                        search_query[key] = []
                     for search_param_value in search_params:
                         search_query[key].append(search_param_value)
         return search_query

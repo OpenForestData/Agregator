@@ -6,6 +6,9 @@ from dataverse_repository.dataverse_repository import DataverseRepository
 from img_proxy_client.img_proxy_client import ImgProxyClient
 
 
+# TODO add loggers
+
+
 class AgregatorRepository:
     """
     Class responsible for preparing, joining and
@@ -27,9 +30,10 @@ class AgregatorRepository:
                     data_file.get('id', None))
                 file['download_url'] = url_to_download_file
                 # create thumbnail if mime type is correct
-                file['thumbnail_url'] = reverse('api:download_thumbnail',
-                                                kwargs={'file_id': data_file.get('id', None)}) if data_file.get(
-                    'contentType') in IMG_PROXY_THUMBNAILS_CREATION_MIME_TYPES else None
+                if data_file.get(
+                        'contentType', '') in IMG_PROXY_THUMBNAILS_CREATION_MIME_TYPES:
+                    file['thumbnail_url'] = reverse('api:download_thumbnail',
+                                                    kwargs={'file_id': data_file.get('id', None)})
         return dataset_data
 
     def get_datasets(self, identifiers_list: list) -> dict:
@@ -61,18 +65,19 @@ class AgregatorRepository:
         for key, value in response['available_filter_fields'].items():
             value.update(facet_filterable_fields[key])
 
-        backend_cms_repository = BackendCmsRepository()
         # TODO: take categories from backend cms!
         response['available_filter_fields']['category'] = self.__backend_cms_repository.get_categories()
         response['filter_groups'] = filter_groups
         response['listing_filter_fields'] = {"TODO": "Ustalić z danielem jak to chce"}
-        return {'list': response, 'global_data': backend_cms_repository.get_global_data()}
+        return {'list': response, 'global_data': self.__backend_cms_repository.get_global_data()}
 
     def get_reouserces(self, resources_ids: list) -> dict:
         """
         Method responsible for preparing response with
         metadata about resources based on their identifiers
         """
+        #TODO wywalic wersje, nie robić
+        #TODO dodajemy dataset na podstawie dataset
         response = {}
         for id in resources_ids:
             resource_details = self.__dataverse_repository.get_resource(id)
@@ -88,6 +93,6 @@ class AgregatorRepository:
         based on img proxy
         """
         url_to_download_file = self.__dataverse_repository.get_url_to_file(file_id)
-        url_thumbnail = self.__img_proxy_client.create_thumbnail_url(url_to_download_file, 200,
-                                                                     200)
+        url_thumbnail = self.__img_proxy_client.create_thumbnail_url(url_to_download_file, 100,
+                                                                     0)
         return url_thumbnail, str(file_id)

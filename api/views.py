@@ -1,3 +1,4 @@
+import mimetypes
 import os
 
 import requests
@@ -36,7 +37,6 @@ class DatasetsDetailsView(APIView):
         Method responsible for handling data and prepare
         them for agrefator repository
         """
-
         datasets_identifier_list = request.data.get('identifiers', None)
         if not datasets_identifier_list:
             return HttpResponse(content={'No identifiers supplied'}, status=status.HTTP_406_NOT_ACCEPTABLE)
@@ -99,6 +99,9 @@ class DownloadThumbnail(APIView):
         agregator_repository = AgregatorRepository()
         url, filename = agregator_repository.get_thumbnail_url(file_id)
         r = requests.get(url, stream=True)
+        content_type = r.headers['Content-Type']
         response = StreamingHttpResponse(streaming_content=r)
-        response['Content-Disposition'] = f'attachement; filename="{file_id}"'
+        extension = mimetypes.guess_extension(content_type)
+        response['Content-Disposition'] = f'attachement; filename="{file_id}{extension}"'
+        response['Content-Type'] = content_type
         return response

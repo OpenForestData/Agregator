@@ -5,8 +5,11 @@ from pyDataverse.api import Api
 
 from agregator_ofd.settings.common import DATAVERSE_URL, SOLR_COLLECTION_URL
 from backend_cms_repository.backend_cms_repository import BackendCmsRepository
-from cache_manager.cache_manager import CacheManager
+from cache_manager.cache_manager import CacheManager, cached
 from dataverse_client.dataverse_client import DataverseClient
+
+
+# TODO add loggers
 
 
 class DataverseRepository:
@@ -17,8 +20,8 @@ class DataverseRepository:
     def __init__(self):
         self.__client = DataverseClient(Api(DATAVERSE_URL),
                                         pysolr.Solr(SOLR_COLLECTION_URL))
-        # TODO should be as param, when redis will be available
         self.__backend_cms_repository = BackendCmsRepository()
+        # TODO delete backend_cms repository
         self.__cache = CacheManager()
 
     def __prepare_params(self, params: dict, search_type='datasets') -> (str, dict):
@@ -55,10 +58,7 @@ class DataverseRepository:
         params['dvObjectType'] = [search_type]
 
         for key, values in params.items():
-            try:
-                new_fquery = f"{key}:{' OR '.join([value for value in values])}"
-            except AttributeError:
-                new_fquery = f"{key}:{' OR '.join([value for value in values])}"
+            new_fquery = f"{key}:{' OR '.join([value for value in values])}"
             final_params['fq'].append(new_fquery)
         return q, final_params
 
@@ -82,30 +82,24 @@ class DataverseRepository:
         response['amount'] = dataverse_client_response.get_amount_of_hits()
         return response
 
+    @cached
     def get_resource(self, resource_id: str):
-        resource = self.__cache.get('resource', resource_id)
-        if not resource:
-            solr_response = self.__client.search("*", {'fq': ['dvObjectType:files', f'entityId:{resource_id}']})
-            resource = solr_response.get_result()
-            self.__cache.set('resource', resource_id, resource)
-            if len(resource) > 0:
-                return resource[0]
-        return resource
+        solr_response = self.__client.search("*", {'fq': ['dvObjectType:files', f'entityId:{resource_id}']})
+        resource = solr_response.get_result()
+        if len(resource) > 0:
+            return resource[0]
+        return None
 
+    @cached
     def get_dataset_details(self, identifier: str):
         """
         Method responsible for getting dataset details (uses dataverse api client)
         """
-        dataset = self.__cache.get('dataset', identifier)
-        if not dataset:
-            dataset = self.__client.get_dataset_details(identifier)
-            if dataset.is_success:
-                json_data = dataset.get_json_data()
-                self.__cache.set('dataset', identifier, json_data)
-                # TODO: very bad  - refactor needed
-                return json_data
-            return None
-        return dataset
+        dataset = self.__client.get_dataset_details(identifier)
+        if dataset.is_success:
+            json_data = dataset.get_json_data()
+            return json_data
+        return None
 
     def get_datasets_details_based_on_identifier_list(self, identifiers_list: list) -> dict:
         """
@@ -145,6 +139,7 @@ class DataverseRepository:
                     metadata_block['name']).get_data()
         return metadata_blocks
 
+    @cached
     def get_datafile_metadata(self, identifier_id: str) -> dict:
         """
         Method responsible for obtaining datafile metada

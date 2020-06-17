@@ -38,7 +38,7 @@ class DataverseClientSearchResponse(DataverseClientResponse):
         Shows all facets from solr response
         """
         try:
-            return self.data.get_facets()
+            return self.data.facets
         except Exception:
             return {}
 
