@@ -25,15 +25,16 @@ class AgregatorRepository:
             identifiers_list)
         for dataset_id, dataset_data in details_data.items():
             files_from_dataset = dataset_data.get('latestVersion', {}).get('files', None)
-            for file in files_from_dataset:
-                data_file = file.get('dataFile', {})
-                url_to_download_file = self.__dataverse_repository.get_url_to_file(
-                    data_file.get('id', None))
-                file['download_url'] = url_to_download_file
-                # create thumbnail if mime type is correct
-                file['thumbnail_url'] = self.__img_proxy_client.create_thumbnail_url(url_to_download_file, 200,
-                                                                                     200) if data_file.get(
-                    'contentType') in IMG_PROXY_THUMBNAILS_CREATION_MIME_TYPES else None
+            if files_from_dataset:
+                for file in files_from_dataset:
+                    data_file = file.get('dataFile', {})
+                    url_to_download_file = self.__dataverse_repository.get_url_to_file(
+                        data_file.get('id', None))
+                    file['download_url'] = url_to_download_file
+                    # create thumbnail if mime type is correct
+                    file['thumbnail_url'] = self.__img_proxy_client.create_thumbnail_url(url_to_download_file, 200,
+                                                                                         200) if data_file.get(
+                        'contentType') in IMG_PROXY_THUMBNAILS_CREATION_MIME_TYPES else None
         return details_data
 
     def search(self, search_params: dict) -> dict:
