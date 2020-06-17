@@ -22,7 +22,7 @@ class SearchView(APIView):
         return JsonResponse(response)
 
 
-class DatasetDetailsView(APIView):
+class DatasetsDetailsView(APIView):
     """
     View responsible for obtaining dataset details views
     """
@@ -43,6 +43,23 @@ class DatasetDetailsView(APIView):
                 status=status.HTTP_406_NOT_ACCEPTABLE)
         agregator_repository = AgregatorRepository()
         details_data = agregator_repository.get_datasets(datasets_identifier_list)
+        return JsonResponse(details_data)
+
+
+class DatasetDetailsView(APIView):
+    """
+    View responsible for obtaining dataset details views
+    """
+    permission_classes = ()
+
+    def get(self, request, identifier):
+        """
+        Method responsible for handling data and prepare
+        them for agrefator repository
+        """
+
+        agregator_repository = AgregatorRepository()
+        details_data = agregator_repository.get_dataset(identifier)
         return JsonResponse(details_data)
 
 

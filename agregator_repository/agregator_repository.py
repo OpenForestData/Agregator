@@ -15,6 +15,21 @@ class AgregatorRepository:
         self.__dataverse_repository = DataverseRepository()
         self.__backend_cms_repository = BackendCmsRepository()
 
+    def get_dataset(self, identifier: str) -> dict:
+        dataset_data = self.__dataverse_repository.get_dataset_details(identifier)
+        files_from_dataset = dataset_data.get('latestVersion', {}).get('files', None)
+        if files_from_dataset:
+            for file in files_from_dataset:
+                data_file = file.get('dataFile', {})
+                url_to_download_file = self.__dataverse_repository.get_url_to_file(
+                    data_file.get('id', None))
+                file['download_url'] = url_to_download_file
+                # create thumbnail if mime type is correct
+                file['thumbnail_url'] = self.__img_proxy_client.create_thumbnail_url(url_to_download_file, 200,
+                                                                                     200) if data_file.get(
+                    'contentType') in IMG_PROXY_THUMBNAILS_CREATION_MIME_TYPES else None
+        return dataset_data
+
     def get_datasets(self, identifiers_list: list) -> dict:
         """
         Method responsible for obtaining dataset information and
@@ -68,5 +83,11 @@ class AgregatorRepository:
         Method responsible for preparing response with
         metadata about resources based on their identifiers
         """
-        response = self.__dataverse_repository.get_datafiles_metadata(resources_ids)
+        response = {}
+        for id in resources_ids:
+            resource_details = self.__dataverse_repository.get_resource(id)
+            if resource_details:
+                url_to_download_file = self.__dataverse_repository.get_url_to_file(id)
+                response['details'] = resource_details
+                response['download_url'] = url_to_download_file
         return response

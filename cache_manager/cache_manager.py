@@ -10,6 +10,8 @@ class CacheManager:
     Class responsible for cache management
     """
 
+    # TODO: Cache should be done as decorator for each function of repository
+
     def __init__(self):
         self.__cache_client = redis.Redis(host=REDIS_HOST, port=int(REDIS_PORT), db=int(REDIS_DB),
                                           password=REDIS_PASSWORD)

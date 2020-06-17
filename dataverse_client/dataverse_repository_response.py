@@ -69,6 +69,15 @@ class DataverseClientSearchResponse(DataverseClientResponse):
         except Exception:
             return []
 
+    @property
+    def amount_of_hits(self) -> int:
+        """
+        Gets full amount of objects
+        """
+        try:
+            return self.data.hits
+        except Exception:
+            return 0
 
 class DataverseDetailDatasetClientResponse(DataverseClientResponse):
     """

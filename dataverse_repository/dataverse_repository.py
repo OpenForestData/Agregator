@@ -21,7 +21,7 @@ class DataverseRepository:
         self.__backend_cms_repository = BackendCmsRepository()
         self.__cache = CacheManager()
 
-    def __prepare_params(self, params: dict) -> (str, dict):
+    def __prepare_params(self, params: dict, search_type='datasets') -> (str, dict):
         """
         Prepare proper params based on api client
         """
@@ -52,19 +52,22 @@ class DataverseRepository:
             params['identifierOfDataverse'] = params['category']
             params.pop('category')
 
-        params['dvObjectType'] = 'datasets'
+        params['dvObjectType'] = [search_type]
 
         for key, values in params.items():
-            new_fquery = f"{key}:{' OR '.join([value for value in params.getlist(key)])}"
+            try:
+                new_fquery = f"{key}:{' OR '.join([value for value in values])}"
+            except AttributeError:
+                new_fquery = f"{key}:{' OR '.join([value for value in values])}"
             final_params['fq'].append(new_fquery)
         return q, final_params
 
-    def search(self, params: dict = None, facet_filterable_fields=[]) -> dict:
+    def search(self, params: dict = None, facet_filterable_fields=[], search_type='datasets') -> dict:
         """
         Prepare response with all required elements for response
         """
         # ensure params are in proper format
-        query, params = self.__prepare_params(params)
+        query, params = self.__prepare_params(params, search_type=search_type)
         # TODO get out as param facet_fields_list
         # get search params from backend cms
         search_params = {'facet.field': facet_filterable_fields}
@@ -76,7 +79,18 @@ class DataverseRepository:
         facet_fields_values = dataverse_client_response.facet_fields_values
         response['available_filter_fields'] = facet_fields_values
         response['results'] = dataverse_client_response.result
+        response['amount'] = dataverse_client_response.amount_of_hits
         return response
+
+    def get_resource(self, id:str):
+        resource = self.__cache.get('resource', id)
+        if not resource:
+            solr_response = self.__client.search("*", {'fq': ['dvObjectType:files', f'entityId:{id}']})
+            resource = solr_response.result
+            self.__cache.set('resource', id, resource)
+            if len(resource) > 0:
+                return resource[0]
+        return resource
 
     def get_dataset_details(self, identifier: str) -> dict:
         """

@@ -11,8 +11,10 @@ urlpatterns = [
     path('hello-world/', core_views.HelloView.as_view(), name='hello'),
     # /api/v1/search
     path('search', api_views.SearchView.as_view(), name='search'),
-    # /api/v1/datasets/details-view
-    path('datasets', api_views.DatasetDetailsView.as_view(), name='datasets'),
+    # /api/v1/dataset/details-view
+    path('dataset/<str:identifier>', api_views.DatasetDetailsView.as_view(), name='dataset'),
+    # /api/v1/datasets/<str:dataset_id>
+    path('datasets', api_views.DatasetsDetailsView.as_view(), name='datasets'),
     # /api/v1/resource/123456
     path('resource/<str:identifier_id>', api_views.ResourceView.as_view(), name='resource'),
     # /api/v1/update-consistency
