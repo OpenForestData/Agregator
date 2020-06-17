@@ -83,7 +83,7 @@ class DataverseRepository:
         # dataset = self.__cache.get('dataset', identifier)
         # if not dataset:
         dataset = self.__client.get_dataset_details(identifier)
-        # self.__cache.set('dataset', identifier, dataset.json_data)
+        self.__cache.set('dataset', identifier, dataset.json_data)
         return dataset.json_data if dataset.is_success else {}
 
     def get_datasets_details_based_on_identifier_list(self, identifiers_list: list) -> dict:
