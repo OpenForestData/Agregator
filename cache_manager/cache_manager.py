@@ -22,7 +22,9 @@ class CacheManager:
 
     def get(self, name, identification: str):
         cached_value = self.__cache_client.hget(name, identification)
-        return json.loads(cached_value)
+        if cached_value:
+            return json.loads(cached_value)
+        return None
 
     def set(self, name, identification: str, serializable_value=None):
         value = json.dumps(serializable_value)
