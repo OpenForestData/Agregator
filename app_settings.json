@@ -9,5 +9,6 @@
   "IMG_PROXY_KEY": "dc493ad6c9ea84b33a4f240664c35e31",
   "REDIS_HOST": "localhost",
   "REDIS_PORT": "6379",
-  "REDIS_BD": "0"
+  "REDIS_BD": "0",
+  "REDIS_PASSWORD": "gQNhn3k3dh"
 }

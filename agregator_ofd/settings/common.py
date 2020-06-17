@@ -151,3 +151,4 @@ IMG_PROXY_THUMBNAILS_CREATION_MIME_TYPES = ['image/png', 'image/jpeg', 'image/ti
 REDIS_HOST = os.environ.get('REDIS_HOST')
 REDIS_PORT = os.environ.get('REDIS_PORT')
 REDIS_DB = os.environ.get('REDIS_BD')
+REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD')

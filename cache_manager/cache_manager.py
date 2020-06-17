@@ -2,7 +2,7 @@ import json
 
 import redis
 
-from agregator_ofd.settings.common import REDIS_HOST, REDIS_PORT, REDIS_DB
+from agregator_ofd.settings.common import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD
 
 
 class CacheManager:
@@ -11,7 +11,8 @@ class CacheManager:
     """
 
     def __init__(self):
-        self.__cache_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
+        self.__cache_client = redis.Redis(host=REDIS_HOST, port=int(REDIS_PORT), db=int(REDIS_DB),
+                                          password=REDIS_PASSWORD)
 
     def __save_to_cache(self, identifier: str, value: str) -> bool:
         return True

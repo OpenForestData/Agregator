@@ -57,11 +57,10 @@ class AgregatorRepository:
 
         backend_cms_repository = BackendCmsRepository()
         # TODO: take categories from backend cms!
-        response['available_filter_fields']['category'] = self.__backend_cms_repository.get_categories()
+        response[list]['available_filter_fields']['category'] = self.__backend_cms_repository.get_categories()
         response['filter_groups'] = filter_groups
         response['listing_filter_fields'] = {"TODO": "Ustalić z danielem jak to chce"}
-        response['global_data'] = backend_cms_repository.get_global_data()
-        return response
+        return {'list': response, 'global_data': backend_cms_repository.get_global_data()}
 
     def get_reouserces(self, resources_ids: list) -> dict:
         """
