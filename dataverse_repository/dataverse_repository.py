@@ -52,6 +52,8 @@ class DataverseRepository:
             params['identifierOfDataverse'] = params['category']
             params.pop('category')
 
+        params['dvObjectType'] = 'datasets'
+
         for key, values in params.items():
             new_fquery = f"{key}:{' OR '.join([value for value in params.getlist(key)])}"
             final_params['fq'].append(new_fquery)
@@ -85,7 +87,7 @@ class DataverseRepository:
             dataset = self.__client.get_dataset_details(identifier)
             if dataset.is_success:
                 self.__cache.set('dataset', identifier, dataset.json_data)
-                #TODO: very bad  - refactor needed
+                # TODO: very bad  - refactor needed
                 return dataset.json_data
             return {}
         return dataset
