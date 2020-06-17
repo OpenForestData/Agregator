@@ -80,11 +80,12 @@ class DataverseRepository:
         """
         Method responsible for getting dataset details (uses dataverse api client)
         """
-        # dataset = self.__cache.get('dataset', identifier)
-        # if not dataset:
-        dataset = self.__client.get_dataset_details(identifier)
-        self.__cache.set('dataset', identifier, dataset.json_data)
-        return dataset.json_data if dataset.is_success else {}
+        dataset = self.__cache.get('dataset', identifier)
+        if not dataset:
+            dataset = self.__client.get_dataset_details(identifier)
+            self.__cache.set('dataset', identifier, dataset.json_data)
+            return dataset.json_data if dataset.is_success else {}
+        return dataset
 
     def get_datasets_details_based_on_identifier_list(self, identifiers_list: list) -> dict:
         """
