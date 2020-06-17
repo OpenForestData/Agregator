@@ -19,13 +19,13 @@ class BackendCmsRepository:
         Method responsible for obtaining facet fields names
         """
 
-        url = self.host + '/pl/cms-api/v1/facet-list'
-        facet_list = requests.get(url)
+        url = self.host + '/cms-api/v1/facet-list'
+        facet_list_json = requests.get(url)
         try:
-            facet_list_json = json.loads(facet_list.text)
-            return {field['facet_field_name']: field['facet_field_friendly_name'] for field in facet_list_json}
+            facet_list = json.loads(facet_list_json.text)
+            return facet_list
         except Exception:
-            print("Did not get data form cms")
+            print("Did not get data from cms")
             return {}
 
     def get_global_data(self) -> dict:
@@ -39,25 +39,29 @@ class BackendCmsRepository:
         """
         Method responsible for getting menu structure
         """
-        menu_data = requests.get(self.host + '/pl/cms-api/global-data')
+        menu_data = requests.get(self.host + '/cms-api/v1/global-data')
         return {}
 
-    def populate_categories_fields_list(self, categories_fields_list: list) -> list:
+    def populate_categories(self, categories_json: str) -> bool:
         """
         Method responsible for populating categories and obtain
         actual categories sets
         """
-        populated_categories_list = []
-        url = self.host + '/pl/cms-api/populate-categories-fields-list/'
-        response = requests.post(url, data={'categories_fields_list': categories_fields_list})
-        return []
+        url = self.host + '/cms-api/v1/populate-categories-fields-list'
+        response = requests.post(url, data={'categories_fields_list': categories_json})
+        return True if response.status_code == 200 else False
 
-    def get_categories_fields_list(self):
-        url = self.host + '/pl/cms-api/get-categories-fields-list/'
-        response = requests.get(url)
-        return ""
+    def get_categories(self):
+        url = self.host + '/cms-api/v1/get-categories'
+        categories_list_json = requests.get(url)
+        try:
+            facet_list = json.loads(categories_list_json.text)
+            return facet_list
+        except Exception:
+            print("Did not get data from cms")
+            return {}
 
-    def register_metadata_blocks(self, metadata_blocs_list) -> bool:
-        url = self.host + '/pl/cms-api/register-metadata-blocks'
-        response = requests.post(url, data=metadata_blocs_list)
+    def register_metadata_blocks(self, metadata_blocks_list) -> bool:
+        url = self.host + '/cms-api/v1/register-metadata-blocks'
+        response = requests.post(url, data={'metadata_blocks': json.dumps(metadata_blocks_list)})
         return True if response.status_code == 200 else False

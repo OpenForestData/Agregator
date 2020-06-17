@@ -6,5 +6,8 @@
   "DATASET_DETAILS_MAX_RESULTS_AMOUNT": "5",
   "IMG_PROXY_URL": "http://localhost:8889",
   "IMG_PROXY_SALT": "9860b57da2fc4f46fe8c46e171155046",
-  "IMG_PROXY_KEY": "dc493ad6c9ea84b33a4f240664c35e31"
+  "IMG_PROXY_KEY": "dc493ad6c9ea84b33a4f240664c35e31",
+  "REDIS_HOST": "localhost",
+  "REDIS_PORT": "6379",
+  "REDIS_BD": "0"
 }

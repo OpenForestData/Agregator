@@ -17,19 +17,8 @@ class SearchView(APIView):
     permission_classes = ()
 
     def get(self, request):
-        DataConsistencyChecker()
-        dataverse_repository = DataverseRepository()
-
-        search_response = dataverse_repository.search(request.query_params)
-
-        backend_cms_repository = BackendCmsRepository()
-        backend_cms_repository.populate_categories_fields_list(dataverse_repository.get_all_categories())
-        search_response['available_filter_fields']['category'] = dataverse_repository.get_all_categories()
-
-        response = {
-            'list': search_response,
-            'global_data': backend_cms_repository.get_global_data()
-        }
+        search_params = request.query_params
+        response = AgregatorRepository().search(search_params)
         return JsonResponse(response)
 
 
@@ -67,3 +56,15 @@ class ResourceView(APIView):
         agregator_repository = AgregatorRepository()
         response = agregator_repository.get_reouserces([identifier_id])
         return JsonResponse(response)
+
+
+class UpdateConsistency(APIView):
+    """
+    Class responsible for on demand updating data in backend cms
+    """
+
+    def get(self, request):
+        updater = DataConsistencyChecker()
+        updater.populate_categories()
+        updater.register_new_metadata_blocks()
+        return HttpResponse('Updated')

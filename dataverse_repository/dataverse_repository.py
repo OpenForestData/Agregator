@@ -5,6 +5,7 @@ from pyDataverse.api import Api
 
 from agregator_ofd.settings.common import DATAVERSE_URL, SOLR_COLLECTION_URL
 from backend_cms_repository.backend_cms_repository import BackendCmsRepository
+from cache_manager.cache_manager import CacheManager
 from dataverse_client.dataverse_client import DataverseClient
 
 
@@ -18,7 +19,7 @@ class DataverseRepository:
                                         pysolr.Solr(SOLR_COLLECTION_URL))
         # TODO should be as param, when redis will be available
         self.__backend_cms_repository = BackendCmsRepository()
-        self.get_all_metadata_blocks_details()
+        self.__cache = CacheManager()
 
     def __prepare_params(self, params: dict) -> (str, dict):
         """
@@ -56,23 +57,21 @@ class DataverseRepository:
             final_params['fq'].append(new_fquery)
         return q, final_params
 
-    def search(self, params: dict = None) -> dict:
+    def search(self, params: dict = None, facet_filterable_fields=[]) -> dict:
         """
         Prepare response with all required elements for response
         """
         # ensure params are in proper format
         query, params = self.__prepare_params(params)
-        facet_fields_data = self.__backend_cms_repository.get_facet_fields_list()
         # TODO get out as param facet_fields_list
         # get search params from backend cms
-        search_params = {'facet.field': list(facet_fields_data.keys())}
-        # update query based on data send by front
+        search_params = {'facet.field': facet_filterable_fields}
+
+        # update query based on data sent by front
         search_params.update(**params)
         response = {}
         dataverse_client_response = self.__client.search(query, search_params)
         facet_fields_values = dataverse_client_response.facet_fields_values
-        for key, value in facet_fields_values.items():
-            value['friendly_name'] = facet_fields_data[key]
         response['available_filter_fields'] = facet_fields_values
         response['results'] = dataverse_client_response.result
         return response
@@ -81,7 +80,10 @@ class DataverseRepository:
         """
         Method responsible for getting dataset details (uses dataverse api client)
         """
+        # dataset = self.__cache.get('dataset', identifier)
+        # if not dataset:
         dataset = self.__client.get_dataset_details(identifier)
+        # self.__cache.set('dataset', identifier, dataset.json_data)
         return dataset.json_data if dataset.is_success else {}
 
     def get_datasets_details_based_on_identifier_list(self, identifiers_list: list) -> dict:
@@ -122,7 +124,11 @@ class DataverseRepository:
                     metadata_block['name']).get_data()
         return metadata_blocks
 
-    def get_resource(self, identifier_id: str) -> dict:
+    def get_datafile_metadata(self, identifier_id: str) -> dict:
+        """
+        Method responsible for obtaining datafile metada
+        based on identifier
+        """
         response = self.__client.get_datafile_metadata(identifier_id)
         if response.is_success:
             data = response.get_data()
@@ -130,8 +136,19 @@ class DataverseRepository:
             data = {}
         return data
 
-    def get_resources(self, identifiers_list: list) -> dict:
-        pass
+    def get_datafiles_metadata(self, identifiers_list: list) -> dict:
+        """
+        Method responsible for obtaining metadata for
+        many datafiles based on list of identifiers
+        """
+        data = {}
+        for identifier in identifiers_list:
+            data[identifier] = self.get_datafile_metadata(identifier)
+        return data
 
     def get_url_to_file(self, file_id: int) -> str:
+        """
+        Method responisble for getting api url
+        to get - download file
+        """
         return f'{DATAVERSE_URL}/api/access/datafile/{file_id}'
