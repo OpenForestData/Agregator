@@ -1,3 +1,5 @@
+from django.urls import reverse
+
 from agregator_ofd.settings.common import IMG_PROXY_THUMBNAILS_CREATION_MIME_TYPES
 from backend_cms_repository.backend_cms_repository import BackendCmsRepository
 from dataverse_repository.dataverse_repository import DataverseRepository
@@ -17,7 +19,7 @@ class AgregatorRepository:
 
     def get_dataset(self, identifier: str) -> dict:
         dataset_data = self.__dataverse_repository.get_dataset_details(identifier)
-        files_from_dataset = dataset_data.get('latestVersion', {}).get('files', None)
+        files_from_dataset = dataset_data.get('latestVersion', {}).get('files', None) if dataset_data else None
         if files_from_dataset:
             for file in files_from_dataset:
                 data_file = file.get('dataFile', {})
@@ -25,32 +27,20 @@ class AgregatorRepository:
                     data_file.get('id', None))
                 file['download_url'] = url_to_download_file
                 # create thumbnail if mime type is correct
-                file['thumbnail_url'] = self.__img_proxy_client.create_thumbnail_url(url_to_download_file, 200,
-                                                                                     200) if data_file.get(
+                file['thumbnail_url'] = reverse('api:download_thumbnail',
+                                                kwargs={'file_id': data_file.get('id', None)}) if data_file.get(
                     'contentType') in IMG_PROXY_THUMBNAILS_CREATION_MIME_TYPES else None
         return dataset_data
 
     def get_datasets(self, identifiers_list: list) -> dict:
         """
-        Method responsible for obtaining dataset information and
-        update it with thumbnail and download resource urls
+        Method responsible for obtaining datasets information
+        details
         """
-
-        details_data = self.__dataverse_repository.get_datasets_details_based_on_identifier_list(
-            identifiers_list)
-        for dataset_id, dataset_data in details_data.items():
-            files_from_dataset = dataset_data.get('latestVersion', {}).get('files', None)
-            if files_from_dataset:
-                for file in files_from_dataset:
-                    data_file = file.get('dataFile', {})
-                    url_to_download_file = self.__dataverse_repository.get_url_to_file(
-                        data_file.get('id', None))
-                    file['download_url'] = url_to_download_file
-                    # create thumbnail if mime type is correct
-                    file['thumbnail_url'] = self.__img_proxy_client.create_thumbnail_url(url_to_download_file, 200,
-                                                                                         200) if data_file.get(
-                        'contentType') in IMG_PROXY_THUMBNAILS_CREATION_MIME_TYPES else None
-        return details_data
+        datasets = {}
+        for identifier in identifiers_list:
+            datasets[identifier] = self.get_dataset(identifier)
+        return datasets
 
     def search(self, search_params: dict) -> dict:
         """
@@ -91,3 +81,13 @@ class AgregatorRepository:
                 response['details'] = resource_details
                 response['download_url'] = url_to_download_file
         return response
+
+    def get_thumbnail_url(self, file_id: int) -> (str, str):
+        """
+        Method responsible for generating thumbnail url
+        based on img proxy
+        """
+        url_to_download_file = self.__dataverse_repository.get_url_to_file(file_id)
+        url_thumbnail = self.__img_proxy_client.create_thumbnail_url(url_to_download_file, 200,
+                                                                     200)
+        return url_thumbnail, str(file_id)

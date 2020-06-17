@@ -33,24 +33,23 @@ class DataverseClientSearchResponse(DataverseClientResponse):
     proper formatting of solr search response
     """
 
-    @property
-    def facets(self) -> dict:
+    def get_facets(self) -> dict:
         """
         Shows all facets from solr response
         """
         try:
-            return self.data.facets
+            return self.data.get_facets()
         except Exception:
             return {}
 
-    @property
-    def facet_fields_values(self) -> dict:
+    def get_facet_fields_values(self) -> dict:
         """
         Property to return proper format of facet fields
         """
         facet_values_dict = {}
-        if 'facet_fields' in self.facets:
-            for field_name, list_of_values in self.facets['facet_fields'].items():
+        facets = self.get_facets()
+        if 'facet_fields' in facets:
+            for field_name, list_of_values in facets['facet_fields'].items():
                 facet_values_dict[field_name] = {
                     'attributes': [{
                         'name': list_of_values[0::2][i],
@@ -59,8 +58,7 @@ class DataverseClientSearchResponse(DataverseClientResponse):
                 }
         return facet_values_dict
 
-    @property
-    def result(self) -> list:
+    def get_result(self) -> list:
         """
         Show results of solr search request
         """
@@ -69,8 +67,7 @@ class DataverseClientSearchResponse(DataverseClientResponse):
         except Exception:
             return []
 
-    @property
-    def amount_of_hits(self) -> int:
+    def get_amount_of_hits(self) -> int:
         """
         Gets full amount of objects
         """
@@ -79,14 +76,14 @@ class DataverseClientSearchResponse(DataverseClientResponse):
         except Exception:
             return 0
 
+
 class DataverseDetailDatasetClientResponse(DataverseClientResponse):
     """
     Class responsible for handling dataverse dataset details format
     proper handling
     """
 
-    @property
-    def json_data(self):
+    def get_json_data(self):
         try:
             return json.loads(self.data)['data']
         except Exception:

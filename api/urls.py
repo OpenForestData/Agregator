@@ -19,4 +19,6 @@ urlpatterns = [
     path('resource/<str:identifier_id>', api_views.ResourceView.as_view(), name='resource'),
     # /api/v1/update-consistency
     path('update-consistency', api_views.UpdateConsistency.as_view(), name='update_consistency'),
+    # /api/v1/thumbnail/12
+    path('thumbnail/<int:file_id>', api_views.DownloadThumbnail.as_view(), name='download_thumbnail'),
 ]

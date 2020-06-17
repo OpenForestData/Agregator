@@ -13,7 +13,7 @@ class ImgProxyClient:
     """
 
     @staticmethod
-    def create_thumbnail_url(base_url: str, width=300, height=300, resize='fit', extension='webp'):
+    def create_thumbnail_url(base_url: str, width=300, height=300, resize='fit', extension='png'):
         key = bytes.fromhex(IMG_PROXY_KEY)
         salt = bytes.fromhex(IMG_PROXY_SALT)
 

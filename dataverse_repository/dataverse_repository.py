@@ -76,23 +76,23 @@ class DataverseRepository:
         search_params.update(**params)
         response = {}
         dataverse_client_response = self.__client.search(query, search_params)
-        facet_fields_values = dataverse_client_response.facet_fields_values
+        facet_fields_values = dataverse_client_response.get_facet_fields_values()
         response['available_filter_fields'] = facet_fields_values
-        response['results'] = dataverse_client_response.result
-        response['amount'] = dataverse_client_response.amount_of_hits
+        response['results'] = dataverse_client_response.get_result()
+        response['amount'] = dataverse_client_response.get_amount_of_hits()
         return response
 
-    def get_resource(self, id:str):
-        resource = self.__cache.get('resource', id)
+    def get_resource(self, resource_id: str):
+        resource = self.__cache.get('resource', resource_id)
         if not resource:
-            solr_response = self.__client.search("*", {'fq': ['dvObjectType:files', f'entityId:{id}']})
-            resource = solr_response.result
-            self.__cache.set('resource', id, resource)
+            solr_response = self.__client.search("*", {'fq': ['dvObjectType:files', f'entityId:{resource_id}']})
+            resource = solr_response.get_result()
+            self.__cache.set('resource', resource_id, resource)
             if len(resource) > 0:
                 return resource[0]
         return resource
 
-    def get_dataset_details(self, identifier: str) -> dict:
+    def get_dataset_details(self, identifier: str):
         """
         Method responsible for getting dataset details (uses dataverse api client)
         """
@@ -100,10 +100,11 @@ class DataverseRepository:
         if not dataset:
             dataset = self.__client.get_dataset_details(identifier)
             if dataset.is_success:
-                self.__cache.set('dataset', identifier, dataset.json_data)
+                json_data = dataset.get_json_data()
+                self.__cache.set('dataset', identifier, json_data)
                 # TODO: very bad  - refactor needed
-                return dataset.json_data
-            return {}
+                return json_data
+            return None
         return dataset
 
     def get_datasets_details_based_on_identifier_list(self, identifiers_list: list) -> dict:
@@ -123,7 +124,7 @@ class DataverseRepository:
         categories = []
         response_from_solr_search = self.__client.search(
             params={'fq': ["dvObjectType:dataverses"], 'start': ['1'], 'rows': ['15']})
-        for dataverse in response_from_solr_search.result:
+        for dataverse in response_from_solr_search.get_result():
             categories.append({
                 'id': dataverse['id'],
                 'friendly_name': dataverse['name'],

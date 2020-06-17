@@ -1,4 +1,7 @@
-from django.http import JsonResponse, HttpResponse
+import os
+
+import requests
+from django.http import JsonResponse, HttpResponse, StreamingHttpResponse
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
@@ -85,3 +88,17 @@ class UpdateConsistency(APIView):
         updater.populate_categories()
         updater.register_new_metadata_blocks()
         return HttpResponse('Updated')
+
+
+class DownloadThumbnail(APIView):
+    """
+    Class responsible for streaming files for users
+    """
+
+    def get(self, request, file_id: int):
+        agregator_repository = AgregatorRepository()
+        url, filename = agregator_repository.get_thumbnail_url(file_id)
+        r = requests.get(url, stream=True)
+        response = StreamingHttpResponse(streaming_content=r)
+        response['Content-Disposition'] = f'attachement; filename="{file_id}"'
+        return response
