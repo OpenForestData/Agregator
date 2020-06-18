@@ -66,12 +66,13 @@ class AgregatorRepository:
             value.update(facet_filterable_fields[key])
 
         # prepare basic filter fields for agregator listing view
-        basic_filter_fields = {}
+        categories = self.__backend_cms_repository.get_categories()
+        basic_filter_fields = {'category': categories}
         for group, value in basic_filter_fields_groups.items():
             for field in value['fields']:
                 basic_filter_fields[field['field_name']] = field
 
-        response['available_filter_fields']['category'] = self.__backend_cms_repository.get_categories()
+        response['available_filter_fields']['category'] = categories
         response['filter_groups'] = filter_groups
         response['listing_filter_fields'] = basic_filter_fields
         return {'list': response, 'global_data': self.__backend_cms_repository.get_global_data()}
