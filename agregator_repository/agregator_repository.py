@@ -51,7 +51,7 @@ class AgregatorRepository:
         Method responsible for handling search query, making query to
         dataverse and preparing data for right agregator format
         """
-        facet_fields_data = self.__backend_cms_repository.get_facet_fields_list()
+        facet_fields_data, basic_filter_fields_groups = self.__backend_cms_repository.get_facet_fields_list()
         filter_groups = {}
         facet_filterable_fields = {}
         # create dict based on names provided and divide for search and listing
@@ -65,10 +65,15 @@ class AgregatorRepository:
         for key, value in response['available_filter_fields'].items():
             value.update(facet_filterable_fields[key])
 
-        # TODO: take categories from backend cms!
+        # prepare basic filter fields for agregator listing view
+        basic_filter_fields = {}
+        for group, value in basic_filter_fields_groups.items():
+            for field in value['fields']:
+                basic_filter_fields[field['field_name']] = field
+
         response['available_filter_fields']['category'] = self.__backend_cms_repository.get_categories()
         response['filter_groups'] = filter_groups
-        response['listing_filter_fields'] = {"TODO": "Ustalić z danielem jak to chce"}
+        response['listing_filter_fields'] = basic_filter_fields
         return {'list': response, 'global_data': self.__backend_cms_repository.get_global_data()}
 
     def get_reouserces(self, resources_ids: list) -> dict:
@@ -76,8 +81,8 @@ class AgregatorRepository:
         Method responsible for preparing response with
         metadata about resources based on their identifiers
         """
-        #TODO wywalic wersje, nie robić
-        #TODO dodajemy dataset na podstawie dataset
+        # TODO wywalic wersje, nie robić
+        # TODO dodajemy dataset na podstawie dataset
         response = {}
         for id in resources_ids:
             resource_details = self.__dataverse_repository.get_resource(id)

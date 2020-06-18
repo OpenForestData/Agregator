@@ -67,12 +67,12 @@ class DataverseClientSearchResponse(DataverseClientResponse):
         except Exception:
             return []
 
-    def get_amount_of_hits(self) -> int:
+    def get_number_of_results(self) -> int:
         """
         Gets full amount of objects
         """
         try:
-            return self.data.hits
+            return self.data.raw_response['response']['numFound']
         except Exception:
             return 0
 

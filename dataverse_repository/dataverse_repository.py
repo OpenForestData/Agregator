@@ -79,7 +79,7 @@ class DataverseRepository:
         facet_fields_values = dataverse_client_response.get_facet_fields_values()
         response['available_filter_fields'] = facet_fields_values
         response['results'] = dataverse_client_response.get_result()
-        response['amount'] = dataverse_client_response.get_amount_of_hits()
+        response['amount'] = dataverse_client_response.get_number_of_results()
         return response
 
     @cached

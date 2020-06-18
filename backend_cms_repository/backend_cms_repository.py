@@ -19,16 +19,16 @@ class BackendCmsRepository:
         self.host = BACKEND_CMS_URL
 
     @cached
-    def get_facet_fields_list(self):
+    def get_facet_fields_list(self) -> (dict, dict):
         """
         Method responsible for obtaining facet fields names
         """
         url = self.host + '/cms-api/v1/facet-list'
         response = requests.get(url)
         if response.status_code != status.HTTP_200_OK:
-            return {}
+            return {}, {}
         facet_list = json.loads(response.text)
-        return facet_list
+        return facet_list['advanced_search_filters'], facet_list['basic_filters']
 
     def get_global_data(self) -> dict:
         """
@@ -50,7 +50,11 @@ class BackendCmsRepository:
         actual categories sets
         """
         url = self.host + '/cms-api/v1/populate-categories-fields-list'
-        response = requests.post(url, data={'categories_fields_list': categories_json})
+        try:
+            response = requests.post(url, data={'categories_fields_list': categories_json})
+        except Exception as ex:
+            #TODO: logger
+            return False
         return response.status_code == status.HTTP_200_OK
 
     @cached
@@ -67,5 +71,9 @@ class BackendCmsRepository:
 
     def register_metadata_blocks(self, metadata_blocks_list) -> bool:
         url = self.host + '/cms-api/v1/register-metadata-blocks'
-        response = requests.post(url, data={'metadata_blocks': json.dumps(metadata_blocks_list)})
+        try:
+            response = requests.post(url, data={'metadata_blocks': json.dumps(metadata_blocks_list)})
+        except Exception as ex:
+            # TODO logger and handling connection error
+            return False
         return response.status_code == status.HTTP_200_OK
