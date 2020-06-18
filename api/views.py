@@ -55,14 +55,19 @@ class DatasetDetailsView(APIView):
     """
     permission_classes = ()
 
-    def get(self, request, identifier):
+    def get(self, request):
         """
         Method responsible for handling data and prepare
         them for agrefator repository
         """
+        identifier = request.query_params.get('identifier', None)
+        if not identifier:
+            return HttpResponse('No identifier supplied', status=status.HTTP_406_NOT_ACCEPTABLE)
 
         agregator_repository = AgregatorRepository()
         details_data = agregator_repository.get_dataset(identifier)
+        if not details_data:
+            return HttpResponse('Dataset does not exist', status=status.HTTP_404_NOT_FOUND)
         return JsonResponse(details_data)
 
 
