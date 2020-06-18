@@ -28,7 +28,14 @@ class BackendCmsRepository:
         if response.status_code != status.HTTP_200_OK:
             return {}, {}
         facet_list = json.loads(response.text)
-        return facet_list['advanced_search_filters'], facet_list['basic_filters']
+        advanced_search_list = {}
+        basic_filters = {}
+        if 'advanced_search_filters' in facet_list:
+            advanced_search_list = facet_list['advanced_search_filters']
+
+        if 'basic_filters' in facet_list:
+            basic_filters = facet_list['basic_filters']
+        return advanced_search_list, basic_filters
 
     def get_global_data(self) -> dict:
         """
@@ -53,7 +60,7 @@ class BackendCmsRepository:
         try:
             response = requests.post(url, data={'categories_fields_list': categories_json})
         except Exception as ex:
-            #TODO: logger
+            # TODO: logger
             return False
         return response.status_code == status.HTTP_200_OK
 
