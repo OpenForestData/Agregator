@@ -64,9 +64,9 @@ class AgregatorRepository:
         response = self.__dataverse_repository.search(search_params, facet_filterable_fields_list)
         for key, value in response['available_filter_fields'].items():
             value.update(facet_filterable_fields[key])
-
-        #prepare basic filter fields for agregator listing view
-        basic_filter_fields = {}
+        categories = self.__backend_cms_repository.get_categories()
+        # prepare basic filter fields for agregator listing view
+        basic_filter_fields = {'category': categories}
         for group, value in basic_filter_fields_groups.items():
             for field in value['fields']:
                 key = field['field_name']
