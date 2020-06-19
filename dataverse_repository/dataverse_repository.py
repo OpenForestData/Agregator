@@ -52,7 +52,7 @@ class DataverseRepository:
             params.pop('rows')
 
         if 'category' in params:
-            params['identifierOfDataverse'] = params['category']
+            params['identifierOfDataverse'] = [params['category']]
             params.pop('category')
 
         if 'mediaTypeStatic' in params:
