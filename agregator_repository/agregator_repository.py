@@ -70,7 +70,8 @@ class AgregatorRepository:
         for group, value in basic_filter_fields_groups.items():
             for field in value['fields']:
                 key = field['field_name']
-                basic_filter_fields[key] = response['listing_filter_fields'][key]
+                if response['listing_filter_fields'][key]['attributes']:
+                    basic_filter_fields[key] = response['listing_filter_fields'][key]
 
         response['listing_filter_fields']['category'] = self.__backend_cms_repository.get_categories()
         response['filter_groups'] = filter_groups
@@ -90,6 +91,7 @@ class AgregatorRepository:
             if resource_details:
                 url_to_download_file = self.__dataverse_repository.get_url_to_file(id)
                 response['details'] = resource_details
+                response['dataset_details'] = self.__dataverse_repository.get_dataset_details(resource_details['parentIdentifier'])
                 response['download_url'] = url_to_download_file
         return response
 
