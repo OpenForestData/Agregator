@@ -62,7 +62,7 @@ class AgregatorRepository:
         facet_filterable_fields_list = [key for key, _ in facet_filterable_fields.items()]
 
         response = self.__dataverse_repository.search(search_params, facet_filterable_fields_list)
-        for key, value in response['available_filter_fields'].items():
+        for key, value in response['listing_filter_fields'].items():
             value.update(facet_filterable_fields[key])
         categories = self.__backend_cms_repository.get_categories()
         # prepare basic filter fields for agregator listing view
@@ -72,9 +72,9 @@ class AgregatorRepository:
                 key = field['field_name']
                 basic_filter_fields[key] = response['available_filter_fields'][key]
 
-        response['available_filter_fields']['category'] = self.__backend_cms_repository.get_categories()
+        response['listing_filter_fields']['category'] = self.__backend_cms_repository.get_categories()
         response['filter_groups'] = filter_groups
-        response['listing_filter_fields'] = basic_filter_fields
+        response['available_filter_fields'] = basic_filter_fields
         return {'list': response, 'global_data': self.__backend_cms_repository.get_global_data()}
 
     def get_reouserces(self, resources_ids: list) -> dict:
