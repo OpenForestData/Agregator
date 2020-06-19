@@ -55,6 +55,13 @@ class DataverseRepository:
             params['identifierOfDataverse'] = params['category']
             params.pop('category')
 
+        if 'mediaTypeStatic' in params:
+            if params['mediaTypeStatic'] == 'image':
+                params['advanced_query'] = ['{!join from=parentIdentifier to=identifier}fileContentType:image*']
+            if params['mediaTypeStatic'] == 'geonode':
+                params['westLongitude'] = ["*"]
+            params.pop('mediaTypeStatic')
+
         params['dvObjectType'] = [search_type]
 
         for key, values in params.items():
