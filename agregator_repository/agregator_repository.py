@@ -70,7 +70,7 @@ class AgregatorRepository:
         for group, value in basic_filter_fields_groups.items():
             for field in value['fields']:
                 key = field['field_name']
-                basic_filter_fields[key] = response['available_filter_fields'][key]
+                basic_filter_fields[key] = response['listing_filter_fields'][key]
 
         response['listing_filter_fields']['category'] = self.__backend_cms_repository.get_categories()
         response['filter_groups'] = filter_groups
