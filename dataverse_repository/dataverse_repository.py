@@ -55,17 +55,19 @@ class DataverseRepository:
             params['identifierOfDataverse'] = [f"*{params['category']}*"]
             params.pop('category')
 
-        if 'mediaTypeStatic' in params:
-            if params['mediaStatic'] == 'true':
-                params['advanced_query'] = ['{!join from=parentIdentifier to=identifier}fileContentType:image*']
-            if params['geoStatic'] == 'true':
-                params['westLongitude'] = ["*"]
-            params.pop('mediaTypeStatic')
+        media_static = params.get('mediaStatic', None)
+        geo_static = params.get('geoStatic', None)
+        if media_static:
+            params['advanced_query'] = ['{!join from=parentIdentifier to=identifier}fileContentType:image*']
+            params.pop('mediaStatic')
+        if geo_static:
+            params['westLongitude'] = ["*"]
+            params.pop('geoStatic')
 
         params['dvObjectType'] = [search_type]
 
         for key, values in params.items():
-            new_fquery = f"{key}:{' OR '.join([f'{value}' for value in values])}"
+            new_fquery = f"{key}:{' OR '.join([f'*{value}*' for value in values])}"
             final_params['fq'].append(new_fquery)
         return q, final_params
 
