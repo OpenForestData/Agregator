@@ -90,8 +90,11 @@ class AgregatorRepository:
             resource_details = self.__dataverse_repository.get_resource(id)
             if resource_details:
                 url_to_download_file = self.__dataverse_repository.get_url_to_file(id)
+                if resource_details['fileTypeDisplay'] == 'Unknown':
+                    resource_details['fileTypeDisplay'] = resource_details['name'].split(".")[-1]
                 response['details'] = resource_details
-                response['dataset_details'] = self.__dataverse_repository.get_dataset_details(resource_details['parentIdentifier'])
+                response['dataset_details'] = self.__dataverse_repository.get_dataset_details(
+                    resource_details['parentIdentifier'])
                 response['download_url'] = url_to_download_file
         return response
 
