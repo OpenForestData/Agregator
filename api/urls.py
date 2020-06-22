@@ -20,4 +20,9 @@ urlpatterns = [
     path('update-consistency', api_views.UpdateConsistency.as_view(), name='update_consistency'),
     # /api/v1/thumbnail/12
     path('thumbnail/<int:file_id>', api_views.DownloadThumbnail.as_view(), name='download_thumbnail'),
+
+    # API CMS ENDPOINTS - BLOG, PAGES, CONTENT ETC...
+
+    # /api/v1/cms/page-details/123/en
+    path('cms/page-details/<str:slug>/<str:lang_code>', api_views.PageDetailsView.as_view(), name='cms_page_details')
 ]

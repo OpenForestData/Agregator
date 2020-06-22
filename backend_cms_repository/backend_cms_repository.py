@@ -18,7 +18,6 @@ class BackendCmsRepository:
 
     def __init__(self):
         self.__client = BackendCmsClient()
-        self.get_menu()
 
     @cached
     def get_facet_fields_list(self) -> (dict, dict):
@@ -40,7 +39,8 @@ class BackendCmsRepository:
         Method responsible for obtaining data that are repeated in
         each view of a agregator (menus, analytics, etc)
         """
-        return {}
+        menu = self.get_menu()
+        return {'menu': menu}
 
     @cached
     def get_menu(self) -> dict:

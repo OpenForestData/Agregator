@@ -110,3 +110,12 @@ class DownloadThumbnail(APIView):
         response['Content-Disposition'] = f'attachement; filename="{file_id}{extension}"'
         response['Content-Type'] = content_type
         return response
+
+
+class PageDetailsView(APIView):
+    """
+    Class responsible for getting cms page details
+    """
+
+    def get(self, slug: str, lang_code: str):
+        return JsonResponse('')
