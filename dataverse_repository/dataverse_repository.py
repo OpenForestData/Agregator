@@ -52,20 +52,20 @@ class DataverseRepository:
             params.pop('rows')
 
         if 'category' in params:
-            params['identifierOfDataverse'] = [params['category']]
+            params['identifierOfDataverse'] = [f"*{params['category']}*"]
             params.pop('category')
 
         if 'mediaTypeStatic' in params:
-            if params['mediaTypeStatic'] == 'image':
+            if params['mediaStatic'] == 'true':
                 params['advanced_query'] = ['{!join from=parentIdentifier to=identifier}fileContentType:image*']
-            if params['mediaTypeStatic'] == 'geonode':
+            if params['geoStatic'] == 'true':
                 params['westLongitude'] = ["*"]
             params.pop('mediaTypeStatic')
 
         params['dvObjectType'] = [search_type]
 
         for key, values in params.items():
-            new_fquery = f"{key}:{' OR '.join([f'*{value}*' for value in values])}"
+            new_fquery = f"{key}:{' OR '.join([f'{value}' for value in values])}"
             final_params['fq'].append(new_fquery)
         return q, final_params
 
