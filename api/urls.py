@@ -23,6 +23,6 @@ urlpatterns = [
 
     # API CMS ENDPOINTS - BLOG, PAGES, CONTENT ETC...
 
-    # /api/v1/cms/page-details/123/en
+    # /api/v1/cms/page-details/o-firmie/en
     path('cms/page-details/<str:slug>/<str:lang_code>', api_views.PageDetailsView.as_view(), name='cms_page_details')
 ]
