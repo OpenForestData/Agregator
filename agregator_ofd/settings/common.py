@@ -119,10 +119,10 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-DATAVERSE_URL = "http://data-epuszcza.biaman.pl:80"
+DATAVERSE_URL = os.environ.get("DATAVERSE_URL")
 print(DATAVERSE_URL)
 
-SOLR_COLLECTION_URL = "http://data-epuszcza.biaman.pl:8983/solr/collection1"
+SOLR_COLLECTION_URL = os.environ.get("SOLR_COLLECTION_URL")
 print(SOLR_COLLECTION_URL)
 
 BACKEND_CMS_URL = os.environ.get("BACKEND_CMS_URL")

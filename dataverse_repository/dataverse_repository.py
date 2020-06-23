@@ -132,6 +132,7 @@ class DataverseRepository:
                 'id': dataverse['id'],
                 'friendly_name': dataverse['name'],
                 'name': dataverse['identifier'],
+                'description': dataverse.get('description', "")
             })
         return categories
 

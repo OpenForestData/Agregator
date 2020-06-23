@@ -14,7 +14,6 @@ class DataConsistencyChecker:
     def __init__(self):
         self.__dataverse_repository = DataverseRepository()
         self.__backend_cms_repository = BackendCmsRepository()
-        self.register_new_metadata_blocks()
 
     def register_new_metadata_blocks(self) -> bool:
         """
