@@ -77,6 +77,7 @@ class AgregatorRepository:
         response['listing_filter_fields']['category'] = self.__backend_cms_repository.get_categories()
         response['filter_groups'] = filter_groups
         response['available_filter_fields'] = basic_filter_fields
+        response['categories_descriptions'] = self.__backend_cms_repository.get_categories_descriptions()
         return {'list': response, 'global_data': self.__backend_cms_repository.get_global_data()}
 
     def get_reouserces(self, resources_ids: list) -> dict:

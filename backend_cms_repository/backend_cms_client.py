@@ -4,7 +4,8 @@ import requests
 from rest_framework import status
 
 from agregator_ofd.settings.common import BACKEND_CMS_URL
-from backend_cms_repository.backend_cms_repository_response import BackendCmsRepositoryResponse
+from backend_cms_repository.backend_cms_repository_response import BackendCmsRepositoryResponse, \
+    BackendCmsCategoriesRepositoryResponse
 
 
 class BackendCmsClient:
@@ -53,7 +54,7 @@ class BackendCmsClient:
         """
         return BackendCmsRepositoryResponse(False, None)
 
-    def get_categories(self):
+    def get_categories(self) -> BackendCmsCategoriesRepositoryResponse:
         """
         Method responsible for getting categories in proper order
         from backend cms
@@ -61,13 +62,13 @@ class BackendCmsClient:
         url = self.host + '/cms-api/v1/get-categories'
         response = requests.get(url)
         if response.status_code != status.HTTP_200_OK:
-            return BackendCmsRepositoryResponse(False, None)
+            return BackendCmsCategoriesRepositoryResponse(False, None)
         try:
             parsed_data = json.loads(response.text)
         except Exception as ex:
             print(ex)
             parsed_data = None
-        return BackendCmsRepositoryResponse(True, parsed_data)
+        return BackendCmsCategoriesRepositoryResponse(True, parsed_data)
 
     def populate_categories(self, categories_json):
         """

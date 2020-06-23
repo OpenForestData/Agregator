@@ -20,3 +20,13 @@ class BackendCmsRepositoryResponse:
         has finished with success
         """
         return self.__is_success
+
+
+class BackendCmsCategoriesRepositoryResponse(BackendCmsRepositoryResponse):
+    """
+    Class responsible for wrapping response with categories
+    form backend cms
+    """
+
+    def get_categories_descriptions(self) -> dict:
+        return {key: value['description'] for key, value in self.get_data().items()}

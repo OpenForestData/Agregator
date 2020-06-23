@@ -75,6 +75,11 @@ class BackendCmsRepository:
             return categories.get_data()
         return {}
 
+    @cached
+    def get_categories_descriptions(self):
+        categories = self.__client.get_categories()
+        return categories.get_categories_descriptions()
+
     def register_metadata_blocks(self, metadata_blocks_list) -> bool:
         """
         Method responsible for registering metadata blocks in backend cms
