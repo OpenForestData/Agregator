@@ -89,6 +89,25 @@ class DataverseDetailDatasetClientResponse(DataverseClientResponse):
         except Exception:
             return {}
 
+    def prepare_format(self):
+        data_basic_format = self.get_json_data()
+        data_basic_format['alternativeURL'] = ""
+        data_basic_format['providers'] = []
+        try:
+            fields = {key['typeName']: key for key in
+                      data_basic_format['latestVersion']['metadataBlocks']['citation']['fields']}
+        except AttributeError:
+            fields = None
+        keys = fields.keys()
+        if 'alternativeURL' in keys:
+            data_basic_format['alternativeURL'] = fields['alternativeURL']['value']
+        if 'author' in keys:
+            try:
+                data_basic_format['providers'] = fields['author']['value']
+            except AttributeError:
+                pass
+        return data_basic_format
+
 
 class DataverseDataFileMetadataResponse(DataverseClientResponse):
     """

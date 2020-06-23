@@ -106,7 +106,7 @@ class DataverseRepository:
         """
         dataset = self.__client.get_dataset_details(identifier)
         if dataset.is_success:
-            json_data = dataset.get_json_data()
+            json_data = dataset.prepare_format()
             return json_data
         return None
 
