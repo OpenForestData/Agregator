@@ -59,7 +59,8 @@ class DataverseClient:
         search_query = {
             "fq": ["publicationStatus:Published"],
             'facet': ['on'],
-            "facet.limit": ["-1"]
+            "facet.limit": ["-1"],
+            "sort": []
         }
 
         if params:

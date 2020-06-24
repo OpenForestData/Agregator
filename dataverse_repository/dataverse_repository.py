@@ -67,7 +67,10 @@ class DataverseRepository:
         params['dvObjectType'] = [search_type]
 
         for key, values in params.items():
-            new_fquery = f"{key}:{' OR '.join([f'{value}' for value in values])}"
+            if isinstance(values, str):
+                new_fquery = f'{key}:"{values}"'
+            else:
+                new_fquery = f'{key}:"{" OR ".join([str(value) for value in values])}"'
             final_params['fq'].append(new_fquery)
         return q, final_params
 
