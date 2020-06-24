@@ -55,6 +55,14 @@ class DataverseRepository:
             params['identifierOfDataverse'] = [f"*{params['category']}*"]
             params.pop('category')
 
+        if 'sort' in params:
+            if params['sort'] == 'desc':
+                final_params['sort'] = ['title desc']
+            else:
+                final_params['sort'] = ['title asc']
+            params.pop('sort')
+
+
         media_static = params.get('mediaStatic', None)
         geo_static = params.get('geoStatic', None)
         if media_static:
