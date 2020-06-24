@@ -52,7 +52,7 @@ class DataverseRepository:
             params.pop('rows')
 
         if 'category' in params:
-            params['identifierOfDataverse'] = [f"*{params['category']}*"]
+            params['identifierOfDataverse'] = [f"{params['category']}"]
             params.pop('category')
 
         if 'sort' in params:
