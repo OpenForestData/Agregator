@@ -12,7 +12,7 @@ class BackendCmsRepositoryResponse:
         """
         Method responsible for getting data from response
         """
-        return self.__data
+        return self.__data if self.__data else {}
 
     def is_success(self):
         """
@@ -28,5 +28,7 @@ class BackendCmsCategoriesRepositoryResponse(BackendCmsRepositoryResponse):
     form backend cms
     """
 
+    # TODO: change names - not onyl categories
+
     def get_categories_descriptions(self) -> dict:
-        return {key: value['description'] for key, value in self.get_data().items()}
+        return {key: value for key, value in self.get_data().items()}

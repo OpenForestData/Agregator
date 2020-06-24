@@ -79,7 +79,8 @@ class DataverseClient:
         try:
             response_from_dataverse = self.__solr_client.search(phrase, **self.__create_search_params(params))
             response = DataverseClientSearchResponse(True, response_from_dataverse)
-        except Exception:
+        except Exception as ex:
+            print(ex)
             # TODO: add exceptions for each type of error
             response = DataverseClientSearchResponse(False)
         return response
