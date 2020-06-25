@@ -121,5 +121,3 @@ class DataverseClient:
         return DataverseDataFileMetadataResponse(True,
                                                  dataverse_response) if dataverse_response.status_code == 200 else DataverseDataFileMetadataResponse(
             False)
-
-    # def get_datafile(self, datafile_id: str) ->:

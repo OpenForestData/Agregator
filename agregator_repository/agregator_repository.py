@@ -71,7 +71,8 @@ class AgregatorRepository:
             for field in value['fields']:
                 key = field['field_name']
                 data = response['listing_filter_fields'].get(key, None)
-                if data and data.get('attributes', None):
+                # if data and data.get('attributes', None):
+                if data:
                     basic_filter_fields[key] = data
 
         response['listing_filter_fields']['category'] = self.__backend_cms_repository.get_categories()
