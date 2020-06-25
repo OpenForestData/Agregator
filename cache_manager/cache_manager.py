@@ -40,8 +40,11 @@ def cached(func):
         #TODO based on signature check if self is
         key_parts = [func.__module__, args[0].__class__.__name__, func.__name__] + list(args[1:])
         key = '-'.join(key_parts)
-        result = cache_manager.get(key)
-
+        try:
+            result = cache_manager.get(key)
+        except Exception as ex:
+            print(ex)
+            result = None
         if result is None:
             value = func(*args, **kwargs)
             cache_manager.set(key, value, expires=REDIS_EXPIRES_TIME_IN_SECONDS)
