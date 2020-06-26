@@ -71,7 +71,9 @@ class AgregatorRepository:
             for field in value['fields']:
                 key = field['field_name']
                 data = response['listing_filter_fields'].get(key, None)
-                if data and data.get('attributes', None) or data and data.get('type') in ['MAP', 'DATERANGE']:
+                # ensure map and datefield could also be in basic filters
+                if data and data.get('attributes', None) or data and data.get('type') in ['MAP', 'DATERANGE', "TEXT",
+                                                                                          "TEXTBOX"]:
                     basic_filter_fields[key] = data
 
         response['listing_filter_fields']['category'] = self.__backend_cms_repository.get_categories()
