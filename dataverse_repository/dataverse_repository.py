@@ -1,5 +1,6 @@
 import copy
 import json
+from urllib.parse import urlencode
 
 import pysolr
 from pyDataverse.api import Api
@@ -49,6 +50,16 @@ class DataverseRepository:
         if 'geographicBoundingBox' in params:
             try:
                 coords = [cord_value.split('_') for cord_value in params['geographicBoundingBox']]
+                coords_dict = {
+                    'northLongitude': coords[1][0],
+                    'westLongitude': coords[0][1],
+                    'eastLongitude': coords[1][1],
+                    'southLongitude': coords[0][0]
+                }
+                final_params['fq'].append(f'northLongitude:[* TO {coords[1][0]}]')
+                final_params['fq'].append(f'westLongitude: [{coords[0][1]} TO *]')
+                final_params['fq'].append(f'eastLongitude:[* TO {coords[1][1]}]')
+                final_params['fq'].append(f'southLongitude: [{coords[0][0]} TO *]')
             except Exception as ex:
                 print(ex)
                 pass
