@@ -1,3 +1,4 @@
+import copy
 import json
 
 import pysolr
@@ -30,7 +31,7 @@ class DataverseRepository:
         """
         q = "*"
         final_params = {'fq': []}
-        params = params.copy()
+        params = dict(copy.deepcopy(params).lists())
         # ensure no facet fields sent
         if 'facet.field' in params:
             params.pop('facet.field')
@@ -38,6 +39,20 @@ class DataverseRepository:
         # ensure no publicationStatus will be changed
         if 'publicationStatus' in params:
             params.pop('publicationStatus')
+
+        if 'dwcEventTime' in params:
+            dwcEventTime = params['dwcEventTime']
+            years = [year[:4] for year in dwcEventTime]
+            final_params['fq'].append(f'dwcEventTime:"{" TO ".join(years)}"')
+            params.pop('dwcEventTime')
+
+        if 'geographicBoundingBox' in params:
+            try:
+                coords = [cord_value.split('_') for cord_value in params['geographicBoundingBox']]
+            except Exception as ex:
+                print(ex)
+                pass
+            params.pop('geographicBoundingBox')
 
         if 'q' in params:
             q = params['q']
@@ -61,7 +76,6 @@ class DataverseRepository:
             else:
                 final_params['sort'] = ['title asc']
             params.pop('sort')
-
 
         media_static = params.get('mediaStatic', None)
         geo_static = params.get('geoStatic', None)
