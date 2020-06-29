@@ -59,15 +59,15 @@ class DataverseRepository:
             params.pop('q')
 
         if 'start' in params:
-            final_params['start'] = [params['start']]
+            final_params['start'] = params['start']
             params.pop('start')
 
         if 'rows' in params:
-            final_params['rows'] = [params['rows']]
+            final_params['rows'] = params['rows']
             params.pop('rows')
 
         if 'category' in params:
-            params['identifierOfDataverse'] = [f"{params['category']}"]
+            params['identifierOfDataverse'] = params['category']
             params.pop('category')
 
         if 'sort' in params:
