@@ -27,6 +27,17 @@ class SearchView(APIView):
         return JsonResponse(response)
 
 
+class StructureView(APIView):
+    """
+    Basic view for structure cms handling
+    """
+    permission_classes = ()
+
+    def get(self, request):
+        response = AgregatorRepository().get_cms_structure()
+        return JsonResponse(response)
+
+
 class DatasetsDetailsView(APIView):
     """
     View responsible for obtaining dataset details views

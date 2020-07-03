@@ -129,3 +129,9 @@ class AgregatorRepository:
         Method responsible for obtaining page details based on given slug
         """
         return self.__backend_cms_repository.get_blog_details(slug)
+
+    def get_cms_structure(self):
+        """
+        Method responsible for getting cms page structure
+        """
+        return self.__backend_cms_repository.get_menu()

@@ -5,7 +5,7 @@ import pysolr
 from agregator_ofd.settings.common import DATAVERSE_URL
 from dataverse_client.dataverse_repository_response import DataverseClientResponse, \
     DataverseClientSearchResponse, DataverseDetailDatasetClientResponse, \
-    DataverseDataFileMetadataResponse
+    DataverseDataFileMetadataResponse, DataverseMetricResponse
 from dataverse_client.exceptions import DataverseClientConnectionException
 
 
@@ -121,3 +121,6 @@ class DataverseClient:
         return DataverseDataFileMetadataResponse(True,
                                                  dataverse_response) if dataverse_response.status_code == 200 else DataverseDataFileMetadataResponse(
             False)
+
+    def get_metrics(self, type: str) -> DataverseMetricResponse:
+        pass

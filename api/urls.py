@@ -10,6 +10,8 @@ urlpatterns = [
     path('hello-world/', core_views.HelloView.as_view(), name='hello'),
     # /api/v1/search
     path('search', api_views.SearchView.as_view(), name='search'),
+    # /api/v1/structure
+    path('structure', api_views.StructureView.as_view(), name='structure'),
     # /api/v1/dataset/details-view
     path('dataset', api_views.DatasetDetailsView.as_view(), name='dataset'),
     # /api/v1/datasets/<str:dataset_id>

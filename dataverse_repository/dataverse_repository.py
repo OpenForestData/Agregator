@@ -217,3 +217,12 @@ class DataverseRepository:
         to get - download file
         """
         return f'{DATAVERSE_URL}/api/access/datafile/{file_id}'
+
+    def get_metrics(self, type='dataverses'):
+        """
+        Method responsible for getting metrics from dataverse,
+        could be one of 4 types: dataverses, datasets, files or downloads
+        """
+        # reponse = self.__client.get_metrics(type)
+        # return response
+        pass

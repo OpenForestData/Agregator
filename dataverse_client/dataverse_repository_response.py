@@ -119,3 +119,9 @@ class DataverseDataFileMetadataResponse(DataverseClientResponse):
             return json.loads(self.data.text)
         except Exception:
             return {}
+
+
+class DataverseMetricResponse(DataverseClientResponse):
+    """
+    Class responsible for wrapping dataverse metrics api response
+    """
