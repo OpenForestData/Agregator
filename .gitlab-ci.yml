@@ -1,7 +1,51 @@
 image: python:3.6-slim-buster
 
 stages:
+    - code checks
     - build
+
+
+before_script:
+    - apt update
+    - apt install git python3-dev libpq-dev libldap2-dev libsasl2-dev ldap-utils build-essential gcc postgresql-server-dev-all -y
+    - pip install -U pip
+    - pip install --ignore-installed -r requirements.txt
+
+PyLint:
+    stage: code checks
+    allow_failure: true
+    script:
+        - pip install pylint pylint_django
+        - pylint --rcfile ./.pylintrc api core agregator_ofd agregator_repository backend_cms_repository cache_manager data_consistency_checker dataverse_client dataverse_repository img_proxy_client
+
+Flake8:
+    stage: code checks
+    before_script:
+        - echo "pass"    
+    script:
+        - apt update && apt install git -y
+        - pip install flake8
+        - flake8 .
+
+Piprot:
+    stage: code checks
+    allow_failure: true
+    script:
+        - pip install piprot
+        - piprot
+
+PipCheck:
+    stage: code checks
+    allow_failure: true
+    script:
+        - pip check
+
+Safety:
+    stage: code checks
+    allow_failure: true
+    script:
+        - pip install safety
+        - safety check -r requirements.txt
 
 Build docker dev image:
     image: 
