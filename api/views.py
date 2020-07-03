@@ -122,7 +122,9 @@ class PageDetailsView(APIView):
         slug = request.GET.get('slug', "/pl")
         agregator_repository = AgregatorRepository()
         response = agregator_repository.get_page_details(slug)
-        return JsonResponse(response)
+        if response:
+            return JsonResponse(response, safe=False)
+        return HttpResponse(status=status.HTTP_404_NOT_FOUND, content="Page does not exist")
 
 
 class BlogListView(APIView):
