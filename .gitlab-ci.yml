@@ -7,7 +7,7 @@ stages:
 
 before_script:
     - apt update
-    - apt install git python3-dev libpq-dev libldap2-dev libsasl2-dev ldap-utils build-essential gcc postgresql-server-dev-all -y
+    - apt install git python3-dev libpq-dev libsasl2-dev build-essential gcc -y
     - pip install -U pip
     - pip install --ignore-installed -r requirements.txt
 
