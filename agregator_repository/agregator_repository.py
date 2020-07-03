@@ -111,3 +111,21 @@ class AgregatorRepository:
         url_thumbnail = self.__img_proxy_client.create_thumbnail_url(url_to_download_file, 100,
                                                                      0)
         return url_thumbnail, str(file_id)
+
+    def get_page_details(self, slug: str) -> dict:
+        """
+        Method responsible for obtaining page details based on given slug
+        """
+        return self.__backend_cms_repository.get_page_details(slug)
+
+    def get_blog_list(self) -> dict:
+        """
+        Method responsible for obtaining page details based on given slug
+        """
+        return self.__backend_cms_repository.get_blog_list()
+
+    def get_blog_details(self, slug: str) -> dict:
+        """
+        Method responsible for obtaining page details based on given slug
+        """
+        return self.__backend_cms_repository.get_blog_details(slug)

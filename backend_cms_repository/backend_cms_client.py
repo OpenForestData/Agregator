@@ -48,11 +48,19 @@ class BackendCmsClient:
             parsed_data = None
         return BackendCmsRepositoryResponse(True, parsed_data)
 
-    def get_page_details(self, page_id: str) -> BackendCmsRepositoryResponse:
+    def get_page_details(self, slug: str) -> BackendCmsRepositoryResponse:
         """
         Method responsible for getting page details from backend cms
         """
-        return BackendCmsRepositoryResponse(False, None)
+        response = requests.get(self.host + slug)
+        if response.status_code != status.HTTP_200_OK:
+            return BackendCmsRepositoryResponse(False, None)
+        try:
+            parsed_data = json.loads(response.text)
+        except Exception as ex:
+            print(ex)
+            parsed_data = None
+        return BackendCmsRepositoryResponse(True, parsed_data)
 
     def get_categories(self) -> BackendCmsCategoriesRepositoryResponse:
         """
@@ -90,4 +98,35 @@ class BackendCmsClient:
         response = requests.post(url, data={'metadata_blocks': json.dumps(metadata_blocks_list)})
         if response.status_code == status.HTTP_200_OK:
             return BackendCmsRepositoryResponse(True, None)
+        return BackendCmsRepositoryResponse(False, None)
+
+    def get_blog_index(self):
+        """
+        Method responsible for obtaining blog index page
+        """
+        url = self.host + '/cms-api/v1/blog/index'
+        response = requests.get(url)
+        if response.status_code == status.HTTP_200_OK:
+            return BackendCmsRepositoryResponse(True, response.text)
+        return BackendCmsRepositoryResponse(False, None)
+
+    def get_blog_details(self, slug):
+        """
+        Method responsible for obtaining blog details about
+        article
+        """
+        url = self.host + slug
+        response = requests.get(url)
+        if response.status_code == status.HTTP_200_OK:
+            return BackendCmsRepositoryResponse(True, response.text)
+        return BackendCmsRepositoryResponse(False, None)
+
+    def get_blog_keyword_list(self, slug):
+        """
+        Method responsible for obtaining blog keyword articles list
+        """
+        url = self.host + slug
+        response = requests.get(url)
+        if response.status_code == status.HTTP_200_OK:
+            return BackendCmsRepositoryResponse(True, response.text)
         return BackendCmsRepositoryResponse(False, None)

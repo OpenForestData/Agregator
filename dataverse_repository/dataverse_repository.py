@@ -50,12 +50,12 @@ class DataverseRepository:
         if 'geographicBoundingBox' in params:
             try:
                 coords = [cord_value.split('_') for cord_value in params['geographicBoundingBox']]
-                coords_dict = {
-                    'northLongitude': coords[1][0],
-                    'westLongitude': coords[0][1],
-                    'eastLongitude': coords[1][1],
-                    'southLongitude': coords[0][0]
-                }
+                # coords_dict = {
+                #     'northLongitude': coords[1][0],
+                #     'westLongitude': coords[0][1],
+                #     'eastLongitude': coords[1][1],
+                #     'southLongitude': coords[0][0]
+                # }
                 final_params['fq'].append(f'northLongitude:[* TO {coords[1][0]}]')
                 final_params['fq'].append(f'westLongitude: [{coords[0][1]} TO *]')
                 final_params['fq'].append(f'eastLongitude:[* TO {coords[1][1]}]')

@@ -117,5 +117,31 @@ class PageDetailsView(APIView):
     Class responsible for getting cms page details
     """
 
-    def get(self, slug: str, lang_code: str):
-        return JsonResponse('')
+    def get(self, request):
+        slug = request.GET.get('slug', "/pl")
+        agregator_repository = AgregatorRepository()
+        response = agregator_repository.get_page_details(slug)
+        return JsonResponse(response)
+
+
+class BlogListView(APIView):
+    """
+    Class responsible for getting cms page details
+    """
+
+    def get(self, request):
+        agregator_repository = AgregatorRepository()
+        response = agregator_repository.get_blog_list()
+        return JsonResponse(response)
+
+
+class BlogDetails(APIView):
+    """
+    Class responsible for getting cms page details
+    """
+
+    def get(self, request):
+        slug = request.GET.get('slug', "")
+        agregator_repository = AgregatorRepository()
+        response = agregator_repository.get_page_details(slug)
+        return JsonResponse(response)
