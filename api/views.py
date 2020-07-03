@@ -159,3 +159,14 @@ class BlogDetails(APIView):
         agregator_repository = AgregatorRepository()
         response = agregator_repository.get_page_details(slug)
         return JsonResponse(response)
+
+
+class HomeView(APIView):
+    """
+    Class responsible for returnign main page data
+    """
+
+    def get(self, request):
+        agregator_repository = AgregatorRepository()
+        response = agregator_repository.get_home()
+        return JsonResponse(response)

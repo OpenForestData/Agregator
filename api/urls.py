@@ -26,6 +26,7 @@ urlpatterns = [
     # API CMS ENDPOINTS - BLOG, PAGES, CONTENT ETC...
 
     # /api/v1/pages
+    path('home', api_views.HomeView.as_view(), name='cms_home_view'),
     path('pages', api_views.PageDetailsView.as_view(), name='cms_page_details'),
     path('blog', api_views.BlogListView.as_view(), name='cms_blog_index'),
     path('blog-slug', api_views.BlogDetails.as_view(), name='cms_blog_details'),

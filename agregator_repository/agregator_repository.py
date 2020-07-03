@@ -135,3 +135,9 @@ class AgregatorRepository:
         Method responsible for getting cms page structure
         """
         return self.__backend_cms_repository.get_menu()
+
+    def get_home(self):
+        """
+        Method responsible for getting all data gor home view
+        """
+        return self.__backend_cms_repository.get_home()

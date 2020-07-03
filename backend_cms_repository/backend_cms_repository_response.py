@@ -1,3 +1,6 @@
+import json
+
+
 class BackendCmsRepositoryResponse:
     """
     Class responsible for wrapping responses from
@@ -20,6 +23,12 @@ class BackendCmsRepositoryResponse:
         has finished with success
         """
         return self.__is_success
+
+    def parse(self):
+        try:
+            return json.loads(self.__data)
+        except Exception as ex:
+            return {}
 
 
 class BackendCmsCategoriesRepositoryResponse(BackendCmsRepositoryResponse):

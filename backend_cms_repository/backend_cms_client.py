@@ -130,3 +130,14 @@ class BackendCmsClient:
         if response.status_code == status.HTTP_200_OK:
             return BackendCmsRepositoryResponse(True, response.text)
         return BackendCmsRepositoryResponse(False, None)
+
+
+    def get_home(self):
+        """
+        Method responsible for getting all main page (home) informations
+        """
+        url = self.host + '/cms-api/v1/home'
+        response = requests.get(url)
+        if response.status_code == status.HTTP_200_OK:
+            return BackendCmsRepositoryResponse(True, response.text)
+        return BackendCmsRepositoryResponse(False, None)
