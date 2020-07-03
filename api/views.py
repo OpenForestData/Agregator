@@ -1,3 +1,4 @@
+import json
 import mimetypes
 import os
 
@@ -132,7 +133,7 @@ class BlogListView(APIView):
     def get(self, request):
         agregator_repository = AgregatorRepository()
         response = agregator_repository.get_blog_list()
-        return JsonResponse(response)
+        return JsonResponse(json.loads(response))
 
 
 class BlogDetails(APIView):
