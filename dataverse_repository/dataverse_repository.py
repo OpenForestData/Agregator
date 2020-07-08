@@ -91,7 +91,7 @@ class DataverseRepository:
             params.pop('mediaStatic')
         if geo_static:
             params['dwcDecimalLatitude'] = ["*"]
-            #TODO: dodac jeszcze geospatial bounding box
+            # TODO: dodac jeszcze geospatial bounding box
             params['dwcDecimalLatitude'] = ["*"]
             params.pop('geoStatic')
 
