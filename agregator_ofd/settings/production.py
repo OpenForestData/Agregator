@@ -9,7 +9,7 @@ DATABASES = {
     "default": db_config.PRODUCTION_SETTINGS
 }
 
-ALLOWED_HOSTS = ['']
+
 
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')

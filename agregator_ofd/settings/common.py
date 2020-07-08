@@ -14,7 +14,7 @@ PROJECT_DIR = os.path.join(BASE_DIR, '../')
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("APPLICATION_SECRET_KEY", 'tw8w$m^s-6qw(uol7^j9qlu+t4@p28ceb+()o&m%sxj62*%o#x')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'agregator.whiteaster.com']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
