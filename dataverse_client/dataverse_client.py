@@ -118,9 +118,9 @@ class DataverseClient:
         on it's id.
         """
         dataverse_response = requests.get(DATAVERSE_URL + f'/api/files/{datafile_id}/metadata')
-        return DataverseDataFileMetadataResponse(True,
-                                                 dataverse_response) if dataverse_response.status_code == 200 else DataverseDataFileMetadataResponse(
-            False)
+        if dataverse_response.status_code != 200:
+            return DataverseDataFileMetadataResponse(False)
+        return DataverseDataFileMetadataResponse(True, dataverse_response)
 
     def get_metrics(self, type: str) -> DataverseMetricResponse:
         pass

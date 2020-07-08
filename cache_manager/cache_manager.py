@@ -1,8 +1,5 @@
-import inspect
 import json
-
 import redis
-
 from agregator_ofd.settings.common import REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD, \
     REDIS_EXPIRES_TIME_IN_SECONDS
 from functools import wraps
@@ -36,8 +33,6 @@ def cached(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         cache_manager = CacheManager()
-
-        #TODO based on signature check if self is
         key_parts = [func.__module__, args[0].__class__.__name__, func.__name__] + list(args[1:])
         key = '-'.join(key_parts)
         try:

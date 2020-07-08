@@ -24,6 +24,7 @@ class DataverseClientResponse:
         except Exception as ex:
             # TODO: add exception handler
             data = {}
+            print(ex)
         return data
 
 

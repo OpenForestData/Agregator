@@ -27,6 +27,5 @@ class DataConsistencyChecker:
         """
         Method responsible for populating list of categories
         """
-        categories_json = json.dumps({'categories':
-                                          self.__dataverse_repository.get_all_categories()})
+        categories_json = json.dumps({'categories': self.__dataverse_repository.get_all_categories()})
         return self.__backend_cms_repository.populate_categories(categories_json)

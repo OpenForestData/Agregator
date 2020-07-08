@@ -28,6 +28,7 @@ class BackendCmsRepositoryResponse:
         try:
             return json.loads(self.__data)
         except Exception as ex:
+            print(ex)
             return {}
 
 

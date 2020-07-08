@@ -1,18 +1,14 @@
 import json
 import mimetypes
-import os
 
 import requests
 from django.http import JsonResponse, HttpResponse, StreamingHttpResponse
-from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
 
 from agregator_ofd.settings.common import DATASET_DETAILS_MAX_RESULTS_AMOUNT
 from agregator_repository.agregator_repository import AgregatorRepository
-from backend_cms_repository.backend_cms_repository import BackendCmsRepository
 from data_consistency_checker.data_consistency_checker import DataConsistencyChecker
-from dataverse_repository.dataverse_repository import DataverseRepository
 
 
 class SearchView(APIView):

@@ -1,10 +1,6 @@
 import copy
-import json
-from urllib.parse import urlencode
-
 import pysolr
 from pyDataverse.api import Api
-
 from agregator_ofd.settings.common import DATAVERSE_URL, SOLR_COLLECTION_URL
 from backend_cms_repository.backend_cms_repository import BackendCmsRepository
 from cache_manager.cache_manager import CacheManager, cached
@@ -94,6 +90,8 @@ class DataverseRepository:
             final_params['fq'].append('{!join from=parentIdentifier to=identifier}fileContentType:image*')
             params.pop('mediaStatic')
         if geo_static:
+            params['dwcDecimalLatitude'] = ["*"]
+            #TODO: dodac jeszcze geospatial bounding box
             params['dwcDecimalLatitude'] = ["*"]
             params.pop('geoStatic')
 

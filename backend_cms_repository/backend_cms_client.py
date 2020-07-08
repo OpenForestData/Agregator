@@ -131,7 +131,6 @@ class BackendCmsClient:
             return BackendCmsRepositoryResponse(True, response.text)
         return BackendCmsRepositoryResponse(False, None)
 
-
     def get_home(self):
         """
         Method responsible for getting all main page (home) informations

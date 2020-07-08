@@ -1,6 +1,5 @@
 from django.conf.urls import url
 from django.conf.urls.static import static
-from django.contrib import admin
 from django.urls import path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
@@ -8,18 +7,14 @@ from rest_framework import permissions
 
 from agregator_ofd.settings import settings
 
-"""
-Root paths for all applications
-"""
+# Root paths for all applications
 
 main_url_patterns = [
     # api for dataverse
     path('api/v1/', include('api.urls', namespace='api'))
 ]
 
-"""
-Swagger endpoints configuration 
-"""
+# Swagger endpoints configuration
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -42,11 +37,10 @@ swagger_patterns = [
 
 urlpatterns = swagger_patterns + main_url_patterns
 
-"""
-Static files in debug mode needed to be reached by url parser.
-In production mode, files should be available under directory 
-declared in settings.STATIC_URL and settings.MEDIA_URL
-"""
+# Static files in debug mode needed to be reached by url parser.
+# In production mode, files should be available under directory
+# declared in settings.STATIC_URL and settings.MEDIA_URL
+
 if settings.DEBUG:
     urlpatterns = urlpatterns + [
     ] + static(
