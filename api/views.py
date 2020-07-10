@@ -140,8 +140,11 @@ class BlogListView(APIView):
     """
 
     def get(self, request):
+        page = request.GET.get('page', 1)
+        limit = request.GET.get('limit', 6)
+        keywords_slug = request.GET.get('keyword', None)
         agregator_repository = AgregatorRepository()
-        response = agregator_repository.get_blog_list()
+        response = agregator_repository.get_blog_list(page, limit, keywords_slug)
         return JsonResponse(json.loads(response))
 
 

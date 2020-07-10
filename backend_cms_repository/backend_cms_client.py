@@ -100,11 +100,13 @@ class BackendCmsClient:
             return BackendCmsRepositoryResponse(True, None)
         return BackendCmsRepositoryResponse(False, None)
 
-    def get_blog_index(self):
+    def get_blog_index(self, page=1, limit=6, keywords_slug=None):
         """
         Method responsible for obtaining blog index page
         """
-        url = self.host + '/cms-api/v1/blog/index'
+        url = self.host + f'/cms-api/v1/blog/index?page={page}&limit={limit}'
+        if keywords_slug:
+            url += f'&keyword={keywords_slug}'
         response = requests.get(url)
         if response.status_code == status.HTTP_200_OK:
             return BackendCmsRepositoryResponse(True, response.text)

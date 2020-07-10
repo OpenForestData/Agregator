@@ -118,11 +118,11 @@ class AgregatorRepository:
         """
         return self.__backend_cms_repository.get_page_details(slug)
 
-    def get_blog_list(self) -> dict:
+    def get_blog_list(self, page, limit, keywords_slug) -> dict:
         """
         Method responsible for obtaining page details based on given slug
         """
-        return self.__backend_cms_repository.get_blog_list()
+        return self.__backend_cms_repository.get_blog_list(page, limit, keywords_slug)
 
     def get_blog_details(self, slug: str) -> dict:
         """

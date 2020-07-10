@@ -79,8 +79,8 @@ class BackendCmsRepository:
         page_details = self.__client.get_page_details(slug)
         return page_details.get_data() if page_details.is_success() else None
 
-    def get_blog_list(self):
-        page_details = self.__client.get_blog_index()
+    def get_blog_list(self, page, limit, keywords_slug):
+        page_details = self.__client.get_blog_index(page, limit, keywords_slug)
         return page_details.get_data() if page_details.is_success() else None
 
     def get_home(self):
