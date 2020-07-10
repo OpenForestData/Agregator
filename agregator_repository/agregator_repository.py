@@ -112,6 +112,12 @@ class AgregatorRepository:
                                                                      0)
         return url_thumbnail, str(file_id)
 
+    def get_metadata(self):
+        """
+        Method responsbile for obtaining information about all metadata in dataverse
+        """
+        return self.__dataverse_repository.get_all_metadata_blocks_details()
+
     def get_page_details(self, slug: str) -> dict:
         """
         Method responsible for obtaining page details based on given slug

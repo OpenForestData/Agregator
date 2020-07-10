@@ -34,6 +34,17 @@ class StructureView(APIView):
         return JsonResponse(response)
 
 
+class MetadataProvideView(APIView):
+    """
+    Basic view for providing all available metadata fields
+    """
+    permission_classes = ()
+
+    def get(self, request):
+        response = AgregatorRepository().get_metadata()
+        return JsonResponse(response)
+
+
 class DatasetsDetailsView(APIView):
     """
     View responsible for obtaining dataset details views

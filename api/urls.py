@@ -18,7 +18,8 @@ urlpatterns = [
     path('update-consistency', api_views.UpdateConsistency.as_view(), name='update_consistency'),
     # /api/v1/thumbnail/12
     path('thumbnail/<int:file_id>', api_views.DownloadThumbnail.as_view(), name='download_thumbnail'),
-
+    # /api/v1/available-metadata
+    path('avilable-metadata', api_views.MetadataProvideView.as_view(), name='available_metadata'),
     # API CMS ENDPOINTS - BLOG, PAGES, CONTENT ETC...
 
     # /api/v1/pages
