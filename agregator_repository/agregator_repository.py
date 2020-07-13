@@ -147,3 +147,9 @@ class AgregatorRepository:
         Method responsible for getting all data gor home view
         """
         return self.__backend_cms_repository.get_home()
+
+    def get_news_list(self, page, limit) -> dict:
+        """
+        Method responsible for getting all latest news
+        """
+        return self.__backend_cms_repository.get_news_list(page, limit)

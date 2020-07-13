@@ -112,6 +112,16 @@ class BackendCmsClient:
             return BackendCmsRepositoryResponse(True, response.text)
         return BackendCmsRepositoryResponse(False, None)
 
+    def get_news_index(self, page=1, limit=6):
+        """
+        Method responsible for obtaining news index page
+        """
+        url = self.host + f'/cms-api/v1/news/latest?page={page}&limit={limit}'
+        response = requests.get(url)
+        if response.status_code == status.HTTP_200_OK:
+            return BackendCmsRepositoryResponse(True, response.text)
+        return BackendCmsRepositoryResponse(False, None)
+
     def get_blog_details(self, slug):
         """
         Method responsible for obtaining blog details about

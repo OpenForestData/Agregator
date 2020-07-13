@@ -27,4 +27,6 @@ urlpatterns = [
     path('pages', api_views.PageDetailsView.as_view(), name='cms_page_details'),
     path('blog', api_views.BlogListView.as_view(), name='cms_blog_index'),
     path('blog-slug', api_views.BlogDetails.as_view(), name='cms_blog_details'),
+    path('news', api_views.NewsListView.as_view(), name='cms_news_index'),
+    path('news-slug', api_views.NewsDetails.as_view(), name='cms_news_details'),
 ]

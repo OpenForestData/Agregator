@@ -86,3 +86,7 @@ class BackendCmsRepository:
     def get_home(self):
         home = self.__client.get_home()
         return home.parse() if home.is_success() else None
+
+    def get_news_list(self, page, limit):
+        page_details = self.__client.get_news_index(page, limit)
+        return page_details.get_data() if page_details.is_success() else None

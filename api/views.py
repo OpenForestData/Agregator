@@ -180,3 +180,28 @@ class HomeView(APIView):
         agregator_repository = AgregatorRepository()
         response = agregator_repository.get_home()
         return JsonResponse(response)
+
+
+class NewsListView(APIView):
+    """
+    Class responsible for getting cms page details
+    """
+
+    def get(self, request):
+        page = request.GET.get('page', 1)
+        limit = request.GET.get('limit', 6)
+        agregator_repository = AgregatorRepository()
+        response = agregator_repository.get_news_list(page, limit)
+        return JsonResponse(json.loads(response))
+
+
+class NewsDetails(APIView):
+    """
+    Class responsible for getting cms page details
+    """
+
+    def get(self, request):
+        slug = request.GET.get('slug', "")
+        agregator_repository = AgregatorRepository()
+        response = agregator_repository.get_page_details(slug)
+        return JsonResponse(response)
