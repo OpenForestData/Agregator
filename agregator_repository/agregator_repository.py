@@ -153,3 +153,17 @@ class AgregatorRepository:
         Method responsible for getting all latest news
         """
         return self.__backend_cms_repository.get_news_list(page, limit)
+
+    def get_dataset_of_the_day(self):
+        """
+        Method responsible for getting dataset of the day
+        """
+        media_datasets = self.__dataverse_repository.get_media_datasets()
+        dataset_of_the_day = media_datasets.data.docs[0]
+        return self.get_dataset(dataset_of_the_day['identifier'])
+
+    def get_metrics_total(self, to_month, past_days):
+        """
+        Method responsible for getting metrics for specified data type
+        """
+        return self.__dataverse_repository.get_all_metrics_total(to_month, past_days)

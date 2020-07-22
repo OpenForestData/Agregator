@@ -1,8 +1,9 @@
 import requests
 from pyDataverse.api import Api
 import pysolr
+from rest_framework import status
 
-from agregator_ofd.settings.common import DATAVERSE_URL
+from agregator_ofd.settings.common import DATAVERSE_URL, METRICS_DATAVERSE_TYPES
 from dataverse_client.dataverse_repository_response import DataverseClientResponse, \
     DataverseClientSearchResponse, DataverseDetailDatasetClientResponse, \
     DataverseDataFileMetadataResponse, DataverseMetricResponse
@@ -112,7 +113,8 @@ class DataverseClient:
             response = DataverseClientResponse(False)
         return response
 
-    def get_datafile_metadata(self, datafile_id: str) -> DataverseDataFileMetadataResponse:
+    @staticmethod
+    def get_datafile_metadata(datafile_id: str) -> DataverseDataFileMetadataResponse:
         """
         Method responsible for obtaining data about datafile based
         on it's id.
@@ -122,5 +124,44 @@ class DataverseClient:
             return DataverseDataFileMetadataResponse(False)
         return DataverseDataFileMetadataResponse(True, dataverse_response)
 
-    def get_metrics(self, type: str) -> DataverseMetricResponse:
-        pass
+    @staticmethod
+    def get_metrics(data_type: str, to_month: str, past_days: str) -> DataverseMetricResponse:
+        """
+        Static method responsible for getting metrics total data of dataverse
+        """
+        if data_type not in METRICS_DATAVERSE_TYPES:
+            data_type = 'dataverses'
+        if past_days:
+            dataverse_response = requests.get(DATAVERSE_URL + f'/api/info/metrics/{data_type}/pastDays/{past_days}')
+        elif to_month:
+            dataverse_response = requests.get(DATAVERSE_URL + f'/api/info/metrics/{data_type}/toMonth/{to_month}')
+        else:
+            dataverse_response = requests.get(DATAVERSE_URL + f'/api/info/metrics/{data_type}')
+        if dataverse_response.status_code != status.HTTP_200_OK:
+            return DataverseMetricResponse(False)
+        return DataverseMetricResponse(True, dataverse_response)
+
+    @staticmethod
+    def get_metrics_by_category_of_dataverses() -> DataverseMetricResponse:
+        """
+        Static method responsible for getting category of dataverses metrics
+        """
+        dataverse_response = requests.get(DATAVERSE_URL + f'/api/info/metrics/dataverses/byCategory')
+        if dataverse_response.status_code != status.HTTP_200_OK:
+            return DataverseMetricResponse(False)
+        return DataverseMetricResponse(True, dataverse_response)
+
+    @staticmethod
+    def get_metrics_by_subject_of_datasets(to_month: str = None) -> DataverseMetricResponse:
+        """
+        Static method responsible for getting subject of datasets metrics
+        """
+        if to_month:
+            dataverse_response = requests.get(
+                DATAVERSE_URL + f'/api/info/metrics/datasets/bySubject/toMonth/{to_month}')
+        else:
+            dataverse_response = requests.get(
+                DATAVERSE_URL + f'/api/info/metrics/datasets/bySubject')
+        if dataverse_response.status_code != status.HTTP_200_OK:
+            return DataverseMetricResponse(False)
+        return DataverseMetricResponse(True, dataverse_response)

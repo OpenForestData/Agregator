@@ -20,6 +20,10 @@ urlpatterns = [
     path('thumbnail/<int:file_id>', api_views.DownloadThumbnail.as_view(), name='download_thumbnail'),
     # /api/v1/available-metadata
     path('avilable-metadata', api_views.MetadataProvideView.as_view(), name='available_metadata'),
+    # /api/v1/metrics
+    path('metrics-total', api_views.Metrics.as_view(), name='dataverse_metrics_total'),
+    # /api/v1/dataset-of-the-day
+    path('dataset-of-the-day', api_views.DatasetOfTheDay.as_view(), name='dataset_of_the_day'),
     # API CMS ENDPOINTS - BLOG, PAGES, CONTENT ETC...
 
     # /api/v1/pages

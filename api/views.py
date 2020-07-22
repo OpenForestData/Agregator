@@ -205,3 +205,28 @@ class NewsDetails(APIView):
         agregator_repository = AgregatorRepository()
         response = agregator_repository.get_page_details(slug)
         return JsonResponse(response)
+
+
+class DatasetOfTheDay(APIView):
+    """
+    Class responsible for getting dataset of the day
+    """
+
+    def get(self, request):
+        agregator_repository = AgregatorRepository()
+        response = agregator_repository.get_dataset_of_the_day()
+        return JsonResponse(response)
+
+
+class Metrics(APIView):
+    """
+    Class responsible for getting metrics from dataverse
+    to query params: to-mont : RRRR-MM, pst-days: 12
+    """
+
+    def get(self, request):
+        to_month = request.query_params.get('to-month', None)
+        past_days = request.query_params.get('past-days', None)
+        agregator_repository = AgregatorRepository()
+        response = agregator_repository.get_metrics_total(to_month, past_days)
+        return JsonResponse(response)

@@ -1,7 +1,7 @@
 import copy
 import pysolr
 from pyDataverse.api import Api
-from agregator_ofd.settings.common import DATAVERSE_URL, SOLR_COLLECTION_URL
+from agregator_ofd.settings.common import DATAVERSE_URL, SOLR_COLLECTION_URL, METRICS_DATAVERSE_TYPES
 from backend_cms_repository.backend_cms_repository import BackendCmsRepository
 from cache_manager.cache_manager import CacheManager, cached
 from dataverse_client.dataverse_client import DataverseClient
@@ -27,7 +27,7 @@ class DataverseRepository:
         Prepare proper params based on api client
         """
         q = "*"
-        final_params = {'fq': []}
+        final_params = {'fq': ['publicationStatus:Published']}
         params = dict(copy.deepcopy(params).lists())
         # ensure no facet fields sent
         if 'facet.field' in params:
@@ -216,11 +216,35 @@ class DataverseRepository:
         """
         return f'{DATAVERSE_URL}/api/access/datafile/{file_id}'
 
-    def get_metrics(self, type='dataverses'):
+    def get_all_metrics_total(self, to_month, past_days):
         """
-        Method responsible for getting metrics from dataverse,
+        Method responsible for obtaining all objects in datavers
+        count from dataverse
+        """
+        all_metrics_total = {}
+        for data_type in METRICS_DATAVERSE_TYPES:
+            all_metrics_total[data_type] = self.get_metrics_total(data_type, to_month, past_days)
+        return all_metrics_total
+
+    def get_metrics_total(self, type='dataverses', to_month=None, past_days=None):
+        """
+        Method responsible returning a count of various objects in dataverse over all-time:
         could be one of 4 types: dataverses, datasets, files or downloads
         """
-        # reponse = self.__client.get_metrics(type)
-        # return response
-        pass
+        response = {}
+        response_total_metrics = self.__client.get_metrics(type, to_month, past_days)
+        if response_total_metrics.is_success:
+            response['total'] = response_total_metrics.get_data()
+        response_metrics_by_category = self.__client.get_metrics_by_category_of_dataverses()
+        if response_metrics_by_category.is_success:
+            response['datasets_category'] = response_metrics_by_category.get_data()
+        response_metrics_by_subjects = self.__client.get_metrics_by_subject_of_datasets(to_month)
+        if response_metrics_by_subjects.is_success:
+            response['datasets_subject'] = response_metrics_by_subjects.get_data()
+        return response or None
+
+    def get_media_datasets(self, start=0, rows=15):
+        """
+        Method responsible for obtaining a list of datasets with medias in it
+        """
+        return self.__client.search('*', {'mediaStatic': ['True'], 'start': [start], 'rows': [rows]})
