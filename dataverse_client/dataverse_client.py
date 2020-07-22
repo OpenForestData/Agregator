@@ -146,7 +146,7 @@ class DataverseClient:
         """
         Static method responsible for getting category of dataverses metrics
         """
-        dataverse_response = requests.get(DATAVERSE_URL + f'/api/info/metrics/dataverses/byCategory')
+        dataverse_response = requests.get(DATAVERSE_URL + '/api/info/metrics/dataverses/byCategory')
         if dataverse_response.status_code != status.HTTP_200_OK:
             return DataverseMetricResponse(False)
         return DataverseMetricResponse(True, dataverse_response)
@@ -161,7 +161,7 @@ class DataverseClient:
                 DATAVERSE_URL + f'/api/info/metrics/datasets/bySubject/toMonth/{to_month}')
         else:
             dataverse_response = requests.get(
-                DATAVERSE_URL + f'/api/info/metrics/datasets/bySubject')
+                DATAVERSE_URL + '/api/info/metrics/datasets/bySubject')
         if dataverse_response.status_code != status.HTTP_200_OK:
             return DataverseMetricResponse(False)
         return DataverseMetricResponse(True, dataverse_response)
