@@ -195,6 +195,17 @@ class NewsListView(APIView):
         return JsonResponse(json.loads(response))
 
 
+class Faq(APIView):
+    """
+    Class responsible fro getting faq from csm
+    """
+
+    def get(self, request):
+        agregator_repository = AgregatorRepository()
+        response = agregator_repository.get_faq()
+        return JsonResponse(json.loads(response), safe=False)
+
+
 class NewsDetails(APIView):
     """
     Class responsible for getting cms page details
@@ -225,8 +236,9 @@ class Metrics(APIView):
     """
 
     def get(self, request):
-        to_month = request.query_params.get('to-month', None)
-        past_days = request.query_params.get('past-days', None)
+        data_type = request.query_params.get('data-type', None)
+        from_date = request.query_params.get('from', None)
+        to_date = request.query_params.get('to', None)
         agregator_repository = AgregatorRepository()
-        response = agregator_repository.get_metrics_total(to_month, past_days)
+        response = agregator_repository.get_metrics_total(from_date, to_date, data_type)
         return JsonResponse(response)

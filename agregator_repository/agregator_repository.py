@@ -162,8 +162,11 @@ class AgregatorRepository:
         dataset_of_the_day = media_datasets.data.docs[0]
         return self.get_dataset(dataset_of_the_day['identifier'])
 
-    def get_metrics_total(self, to_month, past_days):
+    def get_metrics_total(self, from_date, to_date, data_type):
         """
         Method responsible for getting metrics for specified data type
         """
-        return self.__dataverse_repository.get_all_metrics_total(to_month, past_days)
+        return self.__dataverse_repository.get_all_metrics_total(from_date, to_date, data_type)
+
+    def get_faq(self):
+        return self.__backend_cms_repository.get_faq()

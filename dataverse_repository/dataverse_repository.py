@@ -1,6 +1,9 @@
 import copy
+from datetime import date, datetime
 import pysolr
 from pyDataverse.api import Api
+from urllib3.connectionpool import xrange
+
 from agregator_ofd.settings.common import DATAVERSE_URL, SOLR_COLLECTION_URL, METRICS_DATAVERSE_TYPES
 from backend_cms_repository.backend_cms_repository import BackendCmsRepository
 from cache_manager.cache_manager import CacheManager, cached
@@ -216,23 +219,33 @@ class DataverseRepository:
         """
         return f'{DATAVERSE_URL}/api/access/datafile/{file_id}'
 
-    def get_all_metrics_total(self, to_month, past_days):
+    def get_all_metrics_total(self, from_date, to_date, data_type):
         """
         Method responsible for obtaining all objects in datavers
-        count from dataverse
+        count from dataverse, also responsible for making all requests and
+        join responses based on
         """
-        all_metrics_total = {}
-        for data_type in METRICS_DATAVERSE_TYPES:
-            all_metrics_total[data_type] = self.get_metrics_total(data_type, to_month, past_days)
-        return all_metrics_total
 
-    def get_metrics_total(self, type='dataverses', to_month=None, past_days=None):
+        years_and_months = []
+        try:
+            dates = ["2020-01", "2020-08"]
+            start, end = [datetime.strptime(_, "%Y-%M") for _ in dates]
+            total_months = lambda dt: dt.month + 12 * dt.year
+            mlist = []
+            for tot_m in xrange(total_months(start) - 1, total_months(end)):
+                y, m = divmod(tot_m, 12)
+                mlist.append(datetime(y, m + 1, 1).strftime("%b-%y"))
+        except Exception:
+            pass
+        # return self.get_metrics_total(data_type, to_month, past_days)
+
+    def get_metrics_total(self, data_type='dataverses', to_month=None, past_days=None):
         """
         Method responsible returning a count of various objects in dataverse over all-time:
         could be one of 4 types: dataverses, datasets, files or downloads
         """
         response = {}
-        response_total_metrics = self.__client.get_metrics(type, to_month, past_days)
+        response_total_metrics = self.__client.get_metrics(data_type, to_month, past_days)
         if response_total_metrics.is_success:
             response['total'] = response_total_metrics.get_data()
         response_metrics_by_category = self.__client.get_metrics_by_category_of_dataverses()

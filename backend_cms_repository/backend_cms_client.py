@@ -152,3 +152,13 @@ class BackendCmsClient:
         if response.status_code == status.HTTP_200_OK:
             return BackendCmsRepositoryResponse(True, response.text)
         return BackendCmsRepositoryResponse(False, None)
+
+    def get_faq(self):
+        """
+        Method responsible for getting all faqs informations
+        """
+        url = self.host + '/cms-api/v1/faq'
+        response = requests.get(url)
+        if response.status_code == status.HTTP_200_OK:
+            return BackendCmsRepositoryResponse(True, response.text)
+        return BackendCmsRepositoryResponse(False, None)

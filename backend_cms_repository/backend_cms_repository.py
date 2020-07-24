@@ -90,3 +90,8 @@ class BackendCmsRepository:
     def get_news_list(self, page, limit):
         page_details = self.__client.get_news_index(page, limit)
         return page_details.get_data() if page_details.is_success() else None
+
+
+    def get_faq(self):
+        response = self.__client.get_faq()
+        return response.get_data() if response.is_success() else None
