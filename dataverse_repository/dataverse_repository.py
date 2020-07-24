@@ -227,16 +227,16 @@ class DataverseRepository:
         """
 
         # years_and_months = []
-        try:
-            dates = ["2020-01", "2020-08"]
-            start, end = [datetime.strptime(_, "%Y-%M") for _ in dates]
-            total_months = lambda dt: dt.month + 12 * dt.year
-            mlist = []
-            for tot_m in xrange(total_months(start) - 1, total_months(end)):
-                y, m = divmod(tot_m, 12)
-                mlist.append(datetime(y, m + 1, 1).strftime("%b-%y"))
-        except Exception:
-            pass
+        # try:
+        #     dates = ["2020-01", "2020-08"]
+        #     start, end = [datetime.strptime(_, "%Y-%M") for _ in dates]
+        #     total_months = lambda dt: dt.month + 12 * dt.year
+        #     mlist = []
+        #     for tot_m in xrange(total_months(start) - 1, total_months(end)):
+        #         y, m = divmod(tot_m, 12)
+        #         mlist.append(datetime(y, m + 1, 1).strftime("%b-%y"))
+        # except Exception:
+        #     pass
         # return self.get_metrics_total(data_type, to_month, past_days)
 
     def get_metrics_total(self, data_type='dataverses', to_month=None, past_days=None):
