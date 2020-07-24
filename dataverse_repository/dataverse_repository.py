@@ -1,10 +1,10 @@
 import copy
-from datetime import date, datetime
+from datetime import datetime
 import pysolr
 from pyDataverse.api import Api
 from urllib3.connectionpool import xrange
 
-from agregator_ofd.settings.common import DATAVERSE_URL, SOLR_COLLECTION_URL, METRICS_DATAVERSE_TYPES
+from agregator_ofd.settings.common import DATAVERSE_URL, SOLR_COLLECTION_URL
 from backend_cms_repository.backend_cms_repository import BackendCmsRepository
 from cache_manager.cache_manager import CacheManager, cached
 from dataverse_client.dataverse_client import DataverseClient
@@ -226,7 +226,7 @@ class DataverseRepository:
         join responses based on
         """
 
-        years_and_months = []
+        # years_and_months = []
         try:
             dates = ["2020-01", "2020-08"]
             start, end = [datetime.strptime(_, "%Y-%M") for _ in dates]
