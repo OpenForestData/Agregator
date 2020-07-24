@@ -3,7 +3,7 @@ import mimetypes
 
 import requests
 from django.http import JsonResponse, HttpResponse, StreamingHttpResponse
-from rest_framework import status
+from rest_framework import status, serializers
 from rest_framework.views import APIView
 
 from agregator_ofd.settings.common import DATASET_DETAILS_MAX_RESULTS_AMOUNT
@@ -241,4 +241,25 @@ class Metrics(APIView):
         to_date = request.query_params.get('to', None)
         agregator_repository = AgregatorRepository()
         response = agregator_repository.get_metrics_total(from_date, to_date, data_type)
-        return JsonResponse(response)
+        return JsonResponse(response, safe=False)
+
+
+class ContactSendMailSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=20)
+    last_name = serializers.CharField(max_length=20)
+    e_mail = serializers.EmailField(max_length=30)
+    content = serializers.CharField(max_length=300)
+    recaptcha_response = serializers.CharField(max_length=1000)
+
+
+class Contact(APIView):
+    """
+    Class responsible for sending e-mails
+    """
+    serializer_class = ContactSendMailSerializer
+
+    def post(self, request):
+        serializers = ContactSendMailSerializer(data=request.data)
+        if not serializers.is_valid():
+            return HttpResponse(status=status.HTTP_400_BAD_REQUEST, content="2")
+        return JsonResponse({})

@@ -235,6 +235,7 @@ class DataverseRepository:
         # except Exception:
         #     pass
         # return self.get_metrics_total(data_type, to_month, past_days)
+        return None
 
     def get_metrics_total(self, data_type='dataverses', to_month=None, past_days=None):
         """

@@ -25,7 +25,7 @@ urlpatterns = [
     # /api/v1/dataset-of-the-day
     path('dataset-of-the-day', api_views.DatasetOfTheDay.as_view(), name='dataset_of_the_day'),
     # API CMS ENDPOINTS - BLOG, PAGES, CONTENT ETC...
-
+    path('contact', api_views.Contact.as_view(), name='contact'),
     # /api/v1/pages
     path('faq', api_views.Faq.as_view(), name='cms_faq'),
     path('home', api_views.HomeView.as_view(), name='cms_home_view'),
