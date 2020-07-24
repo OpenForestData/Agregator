@@ -1,9 +1,6 @@
 import copy
-from datetime import datetime
 import pysolr
 from pyDataverse.api import Api
-from urllib3.connectionpool import xrange
-
 from agregator_ofd.settings.common import DATAVERSE_URL, SOLR_COLLECTION_URL
 from backend_cms_repository.backend_cms_repository import BackendCmsRepository
 from cache_manager.cache_manager import CacheManager, cached
