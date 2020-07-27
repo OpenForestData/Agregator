@@ -260,6 +260,6 @@ class Contact(APIView):
 
     def post(self, request):
         serializers = ContactSendMailSerializer(data=request.data)
-        if not serializers.is_valid():
-            return HttpResponse(status=status.HTTP_400_BAD_REQUEST, content="2")
-        return JsonResponse({})
+        if not serializers.is_valid(raise_exception=True):
+            return HttpResponse(status=status.HTTP_400_BAD_REQUEST, content=serializers.error_messages)
+        return JsonResponse({'success': "Successfully sent message"})
