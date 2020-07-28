@@ -18,7 +18,7 @@ class SearchView(APIView):
     permission_classes = ()
 
     def get(self, request):
-        language = request.stream.headers.get('Accept-Language', "No language")
+        language = request.headers.get('Accept-Language', "No language")
         search_params = request.query_params
         response = AgregatorRepository().search(search_params)
         response['language'] = language
