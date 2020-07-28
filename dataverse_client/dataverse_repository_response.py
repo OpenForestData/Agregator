@@ -112,7 +112,7 @@ class DataverseDetailDatasetClientResponse(DataverseClientResponse):
 
 class DataverseDataFileMetadataResponse(DataverseClientResponse):
     """
-    Class responsible for handling dataverse dataile details response
+    Class responsible for handling dataverse details response
     """
 
     def get_data(self):

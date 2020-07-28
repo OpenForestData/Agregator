@@ -67,7 +67,7 @@ class BackendCmsClient:
         Method responsible for getting categories in proper order
         from backend cms
         """
-        url = self.host + '/cms-api/v1/get-categories'
+        url = self.host + '/en/cms-api/v1/get-categories'
         response = requests.get(url)
         if response.status_code != status.HTTP_200_OK:
             return BackendCmsCategoriesRepositoryResponse(False, None)
@@ -83,7 +83,7 @@ class BackendCmsClient:
         Method responsible for populating categories
         from dataverse (dataverses) in backend cms
         """
-        url = self.host + '/cms-api/v1/populate-categories-fields-list'
+        url = self.host + '/pl/cms-api/v1/populate-categories-fields-list'
         response = requests.post(url, data={'categories_fields_list': categories_json})
         if response.status_code == status.HTTP_200_OK:
             return BackendCmsRepositoryResponse(True, None)
@@ -94,7 +94,7 @@ class BackendCmsClient:
         Method responsible for registering metadata blocks
         from dataverse in backend cms
         """
-        url = self.host + '/cms-api/v1/register-metadata-blocks'
+        url = self.host + '/pl/cms-api/v1/register-metadata-blocks'
         response = requests.post(url, data={'metadata_blocks': json.dumps(metadata_blocks_list)})
         if response.status_code == status.HTTP_200_OK:
             return BackendCmsRepositoryResponse(True, None)
@@ -104,7 +104,7 @@ class BackendCmsClient:
         """
         Method responsible for obtaining blog index page
         """
-        url = self.host + f'/cms-api/v1/blog/index?page={page}&limit={limit}'
+        url = self.host + f'/pl/cms-api/v1/blog/index?page={page}&limit={limit}'
         if keywords_slug:
             url += f'&keyword={keywords_slug}'
         response = requests.get(url)
@@ -116,7 +116,7 @@ class BackendCmsClient:
         """
         Method responsible for obtaining news index page
         """
-        url = self.host + f'/cms-api/v1/news/latest?page={page}&limit={limit}'
+        url = self.host + f'/pl/cms-api/v1/news/latest?page={page}&limit={limit}'
         response = requests.get(url)
         if response.status_code == status.HTTP_200_OK:
             return BackendCmsRepositoryResponse(True, response.text)
