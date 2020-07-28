@@ -20,7 +20,7 @@ class SearchView(APIView):
     def get(self, request):
         search_params = request.query_params
         response = AgregatorRepository().search(search_params)
-        response['language'] = request.META.get('language', "Nie ma jezyka")
+        response['Accept-Language'] = request.META.get('language', "Nie ma jezyka")
         return JsonResponse(response)
 
 
