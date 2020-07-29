@@ -46,12 +46,12 @@ class AgregatorRepository:
             datasets[identifier] = self.get_dataset(identifier)
         return datasets
 
-    def search(self, search_params: dict) -> dict:
+    def search(self, search_params: dict, language: str) -> dict:
         """
         Method responsible for handling search query, making query to
         dataverse and preparing data for right agregator format
         """
-        facet_fields_data, basic_filter_fields_groups = self.__backend_cms_repository.get_facet_fields_list()
+        facet_fields_data, basic_filter_fields_groups = self.__backend_cms_repository.get_facet_fields_list(language)
         filter_groups = {}
         facet_filterable_fields = {}
         # create dict based on names provided and divide for search and listing
@@ -64,7 +64,7 @@ class AgregatorRepository:
         response = self.__dataverse_repository.search(search_params, facet_filterable_fields_list)
         for key, value in response['listing_filter_fields'].items():
             value.update(facet_filterable_fields[key])
-        categories = self.__backend_cms_repository.get_categories()
+        categories = self.__backend_cms_repository.get_categories(language)
         # prepare basic filter fields for agregator listing view
         basic_filter_fields = {'category': categories}
         for group, value in basic_filter_fields_groups.items():
@@ -76,11 +76,11 @@ class AgregatorRepository:
                                                                                           "TEXTBOX"]:
                     basic_filter_fields[key] = data
 
-        response['listing_filter_fields']['category'] = self.__backend_cms_repository.get_categories()
+        response['listing_filter_fields']['category'] = self.__backend_cms_repository.get_categories(language)
         response['filter_groups'] = filter_groups
         response['available_filter_fields'] = basic_filter_fields
-        response['categories_descriptions'] = self.__backend_cms_repository.get_categories_descriptions()
-        return {'list': response, 'global_data': self.__backend_cms_repository.get_global_data()}
+        response['categories_descriptions'] = self.__backend_cms_repository.get_categories_descriptions(language)
+        return {'list': response, 'global_data': self.__backend_cms_repository.get_global_data(language)}
 
     def get_reouserces(self, resources_ids: list) -> dict:
         """
@@ -124,11 +124,11 @@ class AgregatorRepository:
         """
         return self.__backend_cms_repository.get_page_details(slug)
 
-    def get_blog_list(self, page, limit, keywords_slug) -> dict:
+    def get_blog_list(self, language, page, limit, keywords_slug) -> dict:
         """
         Method responsible for obtaining page details based on given slug
         """
-        return self.__backend_cms_repository.get_blog_list(page, limit, keywords_slug)
+        return self.__backend_cms_repository.get_blog_list(language, page, limit, keywords_slug)
 
     def get_blog_details(self, slug: str) -> dict:
         """
@@ -136,30 +136,30 @@ class AgregatorRepository:
         """
         return self.__backend_cms_repository.get_blog_details(slug)
 
-    def get_cms_structure(self):
+    def get_cms_structure(self, language: str):
         """
         Method responsible for getting cms page structure
         """
-        return self.__backend_cms_repository.get_menu()
+        return self.__backend_cms_repository.get_menu(language)
 
-    def get_home(self):
+    def get_home(self, language: str):
         """
         Method responsible for getting all data gor home view
         """
-        return self.__backend_cms_repository.get_home()
+        return self.__backend_cms_repository.get_home(language)
 
-    def get_news_list(self, page, limit) -> dict:
+    def get_news_list(self,language, page, limit) -> dict:
         """
         Method responsible for getting all latest news
         """
-        return self.__backend_cms_repository.get_news_list(page, limit)
+        return self.__backend_cms_repository.get_news_list(language, page, limit)
 
     def get_dataset_of_the_day(self):
         """
         Method responsible for getting dataset of the day
         """
         media_datasets = self.__dataverse_repository.get_media_datasets()
-        dataset_of_the_day = media_datasets.data.docs[0]
+        dataset_of_the_day = media_datasets.data.docs[1]
         return self.get_dataset(dataset_of_the_day['identifier'])
 
     def get_metrics_total(self, from_date, to_date, data_type):
@@ -168,5 +168,5 @@ class AgregatorRepository:
         """
         return self.__dataverse_repository.get_all_metrics_total(from_date, to_date, data_type)
 
-    def get_faq(self):
-        return self.__backend_cms_repository.get_faq()
+    def get_faq(self, language: str):
+        return self.__backend_cms_repository.get_faq(language)

@@ -17,12 +17,12 @@ class BackendCmsClient:
     def __init__(self):
         self.host = BACKEND_CMS_URL
 
-    def get_facet_fields(self):
+    def get_facet_fields(self, language):
         """
         Method responsible for obtaining facet fields
         from backend cms
         """
-        url = self.host + '/cms-api/v1/facet-list'
+        url = self.host + f'/{language}/cms-api/v1/facet-list'
         response = requests.get(url)
         if response.status_code != status.HTTP_200_OK:
             return BackendCmsRepositoryResponse(False, None)
@@ -33,12 +33,12 @@ class BackendCmsClient:
             parsed_data = None
         return BackendCmsRepositoryResponse(True, parsed_data)
 
-    def get_menu(self):
+    def get_menu(self, language):
         """
         Method responsible for geting menu nodes
         from backend cms
         """
-        response = requests.get(self.host + '/cms-api/v1/menu')
+        response = requests.get(self.host + f'/{language}/cms-api/v1/menu')
         if response.status_code != status.HTTP_200_OK:
             return BackendCmsRepositoryResponse(False, None)
         try:
@@ -62,12 +62,12 @@ class BackendCmsClient:
             parsed_data = None
         return BackendCmsRepositoryResponse(True, parsed_data)
 
-    def get_categories(self) -> BackendCmsCategoriesRepositoryResponse:
+    def get_categories(self, language) -> BackendCmsCategoriesRepositoryResponse:
         """
         Method responsible for getting categories in proper order
         from backend cms
         """
-        url = self.host + '/en/cms-api/v1/get-categories'
+        url = self.host + f'/{language}/cms-api/v1/get-categories'
         response = requests.get(url)
         if response.status_code != status.HTTP_200_OK:
             return BackendCmsCategoriesRepositoryResponse(False, None)
@@ -100,11 +100,11 @@ class BackendCmsClient:
             return BackendCmsRepositoryResponse(True, None)
         return BackendCmsRepositoryResponse(False, None)
 
-    def get_blog_index(self, page=1, limit=6, keywords_slug=None):
+    def get_blog_index(self, language, page=1, limit=6, keywords_slug=None):
         """
         Method responsible for obtaining blog index page
         """
-        url = self.host + f'/pl/cms-api/v1/blog/index?page={page}&limit={limit}'
+        url = self.host + f'/{language}/cms-api/v1/blog/index?page={page}&limit={limit}'
         if keywords_slug:
             url += f'&keyword={keywords_slug}'
         response = requests.get(url)
@@ -112,11 +112,11 @@ class BackendCmsClient:
             return BackendCmsRepositoryResponse(True, response.text)
         return BackendCmsRepositoryResponse(False, None)
 
-    def get_news_index(self, page=1, limit=6):
+    def get_news_index(self, language, page=1, limit=6):
         """
         Method responsible for obtaining news index page
         """
-        url = self.host + f'/pl/cms-api/v1/news/latest?page={page}&limit={limit}'
+        url = self.host + f'/{language}/cms-api/v1/news/latest?page={page}&limit={limit}'
         response = requests.get(url)
         if response.status_code == status.HTTP_200_OK:
             return BackendCmsRepositoryResponse(True, response.text)
@@ -143,21 +143,21 @@ class BackendCmsClient:
             return BackendCmsRepositoryResponse(True, response.text)
         return BackendCmsRepositoryResponse(False, None)
 
-    def get_home(self):
+    def get_home(self, language: str):
         """
         Method responsible for getting all main page (home) informations
         """
-        url = self.host + '/cms-api/v1/home'
+        url = self.host + f'/{language}/cms-api/v1/home'
         response = requests.get(url)
         if response.status_code == status.HTTP_200_OK:
             return BackendCmsRepositoryResponse(True, response.text)
         return BackendCmsRepositoryResponse(False, None)
 
-    def get_faq(self):
+    def get_faq(self, language: str):
         """
         Method responsible for getting all faqs informations
         """
-        url = self.host + '/cms-api/v1/faq'
+        url = self.host + f'/{language}/cms-api/v1/faq'
         response = requests.get(url)
         if response.status_code == status.HTTP_200_OK:
             return BackendCmsRepositoryResponse(True, response.text)

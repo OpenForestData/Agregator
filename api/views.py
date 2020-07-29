@@ -18,9 +18,9 @@ class SearchView(APIView):
     permission_classes = ()
 
     def get(self, request):
-        language = request.headers.get('Accept-Language', "No language")
+        language = request.headers.get('Accept-Language', "pl")
         search_params = request.query_params
-        response = AgregatorRepository().search(search_params)
+        response = AgregatorRepository().search(search_params, language)
         response['language'] = language
         return JsonResponse(response)
 
@@ -32,7 +32,8 @@ class StructureView(APIView):
     permission_classes = ()
 
     def get(self, request):
-        response = AgregatorRepository().get_cms_structure()
+        language = request.headers.get('Accept-Language', "pl")
+        response = AgregatorRepository().get_cms_structure(language)
         return JsonResponse(response)
 
 
@@ -153,11 +154,12 @@ class BlogListView(APIView):
     """
 
     def get(self, request):
+        language = request.headers.get('Accept-Language', "pl")
         page = request.GET.get('page', 1)
         limit = request.GET.get('limit', 6)
         keywords_slug = request.GET.get('keyword', None)
         agregator_repository = AgregatorRepository()
-        response = agregator_repository.get_blog_list(page, limit, keywords_slug)
+        response = agregator_repository.get_blog_list(language, page, limit, keywords_slug)
         return JsonResponse(json.loads(response))
 
 
@@ -167,6 +169,7 @@ class BlogDetails(APIView):
     """
 
     def get(self, request):
+        language = request.headers.get('Accept-Language', "pl")
         slug = request.GET.get('slug', "")
         agregator_repository = AgregatorRepository()
         response = agregator_repository.get_page_details(slug)
@@ -179,8 +182,9 @@ class HomeView(APIView):
     """
 
     def get(self, request):
+        language = request.headers.get('Accept-Language', "pl")
         agregator_repository = AgregatorRepository()
-        response = agregator_repository.get_home()
+        response = agregator_repository.get_home(language)
         return JsonResponse(response)
 
 
@@ -190,10 +194,11 @@ class NewsListView(APIView):
     """
 
     def get(self, request):
+        language = request.headers.get('Accept-Language', "pl")
         page = request.GET.get('page', 1)
         limit = request.GET.get('limit', 6)
         agregator_repository = AgregatorRepository()
-        response = agregator_repository.get_news_list(page, limit)
+        response = agregator_repository.get_news_list(language, page, limit)
         return JsonResponse(json.loads(response))
 
 
@@ -203,8 +208,9 @@ class Faq(APIView):
     """
 
     def get(self, request):
+        language = request.headers.get('Accept-Language', "pl")
         agregator_repository = AgregatorRepository()
-        response = agregator_repository.get_faq()
+        response = agregator_repository.get_faq(language)
         return JsonResponse(json.loads(response), safe=False)
 
 
