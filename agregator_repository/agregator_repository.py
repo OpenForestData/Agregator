@@ -118,11 +118,11 @@ class AgregatorRepository:
         """
         return self.__dataverse_repository.get_all_metadata_blocks_details()
 
-    def get_page_details(self, slug: str) -> dict:
+    def get_page_details(self, slug: str, language: str) -> dict:
         """
         Method responsible for obtaining page details based on given slug
         """
-        return self.__backend_cms_repository.get_page_details(slug)
+        return self.__backend_cms_repository.get_page_details(slug, language)
 
     def get_blog_list(self, language, page, limit, keywords_slug) -> dict:
         """

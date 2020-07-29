@@ -141,8 +141,9 @@ class PageDetailsView(APIView):
 
     def get(self, request):
         slug = request.GET.get('slug', "/pl")
+        language = request.headers.get('accept-language', "pl")
         agregator_repository = AgregatorRepository()
-        response = agregator_repository.get_page_details(slug)
+        response = agregator_repository.get_page_details(slug, language)
         if response:
             return JsonResponse(response, safe=False)
         return HttpResponse(status=status.HTTP_404_NOT_FOUND, content="Page does not exist")
@@ -169,9 +170,10 @@ class BlogDetails(APIView):
     """
 
     def get(self, request):
+        language = request.headers.get('accept-language', "pl")
         slug = request.GET.get('slug', "")
         agregator_repository = AgregatorRepository()
-        response = agregator_repository.get_page_details(slug)
+        response = agregator_repository.get_page_details(slug, language)
         return JsonResponse(response)
 
 

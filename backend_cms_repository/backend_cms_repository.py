@@ -71,8 +71,8 @@ class BackendCmsRepository:
         """
         return self.__client.register_metadata_blocks(metadata_blocks_list).is_success()
 
-    def get_page_details(self, slug: str):
-        page_details = self.__client.get_page_details(slug)
+    def get_page_details(self, slug: str, language: str):
+        page_details = self.__client.get_page_details(slug, language)
         return page_details.get_data() if page_details.is_success() else None
 
     def get_blog_details(self, slug: str):

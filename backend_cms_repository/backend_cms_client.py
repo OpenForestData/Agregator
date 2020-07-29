@@ -48,11 +48,14 @@ class BackendCmsClient:
             parsed_data = None
         return BackendCmsRepositoryResponse(True, parsed_data)
 
-    def get_page_details(self, slug: str) -> BackendCmsRepositoryResponse:
+    def get_page_details(self, slug: str, language: str) -> BackendCmsRepositoryResponse:
         """
         Method responsible for getting page details from backend cms
         """
-        response = requests.get(self.host + slug)
+        url = self.host + f'/{language}' + slug
+        if language in slug:
+            url = self.host + slug
+        response = requests.get(url)
         if response.status_code != status.HTTP_200_OK:
             return BackendCmsRepositoryResponse(False, None)
         try:
