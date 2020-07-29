@@ -148,7 +148,7 @@ class AgregatorRepository:
         """
         return self.__backend_cms_repository.get_home(language)
 
-    def get_news_list(self,language, page, limit) -> dict:
+    def get_news_list(self, language, page, limit) -> dict:
         """
         Method responsible for getting all latest news
         """

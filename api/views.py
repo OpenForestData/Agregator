@@ -169,7 +169,6 @@ class BlogDetails(APIView):
     """
 
     def get(self, request):
-        language = request.headers.get('Accept-Language', "pl")
         slug = request.GET.get('slug', "")
         agregator_repository = AgregatorRepository()
         response = agregator_repository.get_page_details(slug)
