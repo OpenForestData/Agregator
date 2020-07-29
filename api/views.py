@@ -18,7 +18,7 @@ class SearchView(APIView):
     permission_classes = ()
 
     def get(self, request):
-        language = request.headers.get('Accept-Language', "pl")
+        language = request.headers.get('accept-language', "pl")
         search_params = request.query_params
         response = AgregatorRepository().search(search_params, language)
         response['language'] = language
@@ -32,7 +32,7 @@ class StructureView(APIView):
     permission_classes = ()
 
     def get(self, request):
-        language = request.headers.get('Accept-Language', "pl")
+        language = request.headers.get('accept-language', "pl")
         response = AgregatorRepository().get_cms_structure(language)
         return JsonResponse(response)
 
@@ -154,7 +154,7 @@ class BlogListView(APIView):
     """
 
     def get(self, request):
-        language = request.headers.get('Accept-Language', "pl")
+        language = request.headers.get('accept-language', "pl")
         page = request.GET.get('page', 1)
         limit = request.GET.get('limit', 6)
         keywords_slug = request.GET.get('keyword', None)
@@ -181,7 +181,7 @@ class HomeView(APIView):
     """
 
     def get(self, request):
-        language = request.headers.get('Accept-Language', "pl")
+        language = request.headers.get('accept-language', "pl")
         agregator_repository = AgregatorRepository()
         response = agregator_repository.get_home(language)
         return JsonResponse(response)
@@ -193,7 +193,7 @@ class NewsListView(APIView):
     """
 
     def get(self, request):
-        language = request.headers.get('Accept-Language', "pl")
+        language = request.headers.get('accept-language', "pl")
         page = request.GET.get('page', 1)
         limit = request.GET.get('limit', 6)
         agregator_repository = AgregatorRepository()
@@ -207,7 +207,7 @@ class Faq(APIView):
     """
 
     def get(self, request):
-        language = request.headers.get('Accept-Language', "pl")
+        language = request.headers.get('accept-language', "pl")
         agregator_repository = AgregatorRepository()
         response = agregator_repository.get_faq(language)
         return JsonResponse(json.loads(response), safe=False)
