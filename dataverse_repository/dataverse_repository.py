@@ -1,6 +1,8 @@
 import copy
+
 import pysolr
 from pyDataverse.api import Api
+
 from agregator_ofd.settings.common import DATAVERSE_URL, SOLR_COLLECTION_URL
 from backend_cms_repository.backend_cms_repository import BackendCmsRepository
 from cache_manager.cache_manager import CacheManager, cached
@@ -65,13 +67,13 @@ class DataverseRepository:
             q = params['q']
             params.pop('q')
 
-        if 'start' in params:
-            final_params['start'] = params['start']
-            params.pop('start')
-
         if 'rows' in params:
             final_params['rows'] = params['rows']
             params.pop('rows')
+
+        if 'start' in params:
+            final_params['start'] = params['start'] * final_params['rows'] or 15
+            params.pop('start')
 
         if 'category' in params:
             params['identifierOfDataverse'] = params['category']
@@ -258,5 +260,7 @@ class DataverseRepository:
         """
         Method responsible for obtaining a list of datasets with medias in it
         """
-        return self.__client.search('*', {'fq': ['publicationStatus:Published', '{!join from=parentIdentifier to=identifier}fileContentType:image*',
-                   'dvObjectType:datasets'], 'start': ['0'], 'rows': ['15'], 'sort': ['title asc']})
+        return self.__client.search('*', {'fq': ['publicationStatus:Published',
+                                                 '{!join from=parentIdentifier to=identifier}fileContentType:image*',
+                                                 'dvObjectType:datasets'], 'start': ['0'], 'rows': ['15'],
+                                          'sort': ['title asc']})
