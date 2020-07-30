@@ -221,9 +221,10 @@ class NewsDetails(APIView):
     """
 
     def get(self, request):
+        language = request.headers.get('accept-language', "pl")
         slug = request.GET.get('slug', "")
         agregator_repository = AgregatorRepository()
-        response = agregator_repository.get_page_details(slug)
+        response = agregator_repository.get_page_details(slug, language)
         return JsonResponse(response)
 
 
