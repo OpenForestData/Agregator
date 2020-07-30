@@ -72,7 +72,7 @@ class DataverseRepository:
             params.pop('rows')
 
         if 'start' in params:
-            final_params['start'] = params['start'] * final_params['rows'] or ['15']
+            final_params['start'] = [str(int(params['start'][0]) * int(final_params['rows'][0]) or 15)]
             params.pop('start')
 
         if 'category' in params:
