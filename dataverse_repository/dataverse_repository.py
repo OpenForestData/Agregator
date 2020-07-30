@@ -72,7 +72,7 @@ class DataverseRepository:
             params.pop('rows')
 
         if 'start' in params:
-            final_params['start'] = params['start'] * final_params['rows'] or 15
+            final_params['start'] = params['start'] * final_params['rows'] or ['15']
             params.pop('start')
 
         if 'category' in params:
@@ -109,7 +109,7 @@ class DataverseRepository:
 
     def search(self, params: dict = None, facet_filterable_fields=[], search_type='datasets') -> dict:
         """
-        Prepare response with all required elements for response
+        Prepare response with all required elements
         """
         # ensure params are in proper format
         query, params = self.__prepare_params(params, search_type=search_type)
