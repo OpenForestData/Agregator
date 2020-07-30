@@ -258,4 +258,5 @@ class DataverseRepository:
         """
         Method responsible for obtaining a list of datasets with medias in it
         """
-        return self.__client.search('*', {'mediaStatic': ['True'], 'start': [start], 'rows': [rows]})
+        return self.__client.search('*', {'fq': ['publicationStatus:Published', '{!join from=parentIdentifier to=identifier}fileContentType:image*',
+                   'dvObjectType:datasets'], 'start': ['0'], 'rows': ['15'], 'sort': ['title asc']})

@@ -225,7 +225,7 @@ class NewsDetails(APIView):
         slug = request.GET.get('slug', "")
         agregator_repository = AgregatorRepository()
         response = agregator_repository.get_page_details(slug, language)
-        return JsonResponse(response)
+        return JsonResponse(response, safe=False)
 
 
 class DatasetOfTheDay(APIView):

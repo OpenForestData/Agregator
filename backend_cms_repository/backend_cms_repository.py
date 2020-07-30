@@ -53,7 +53,6 @@ class BackendCmsRepository:
         response = self.__client.populate_categories(categories_json)
         return response.is_success()
 
-    @cached
     def get_categories(self, language: str):
         categories = self.__client.get_categories(language)
         if categories.is_success():

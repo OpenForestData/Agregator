@@ -83,7 +83,6 @@ class DataverseClient:
             response = DataverseClientSearchResponse(True, response_from_dataverse)
         except Exception as ex:
             print(ex)
-            # TODO: add exceptions for each type of error
             response = DataverseClientSearchResponse(False)
         return response
 
@@ -95,8 +94,8 @@ class DataverseClient:
         try:
             response_from_dataverse = self.__dataverse_client.get_metadatablocks()
             response = DataverseClientResponse(True, response_from_dataverse)
-        except Exception:
-            # TODO: handle exception
+        except Exception as ex:
+            print(ex)
             response = DataverseClientResponse(False)
         return response
 
