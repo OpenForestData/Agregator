@@ -14,7 +14,7 @@ class FiveStarRepository:
         self.host = FIVE_STAR_REPOSITORY_URL
 
     def get_metrics(self, data_type: str, from_date: str, to_date: str):
-        url = self.host + f"/api/v1/metrics?data-type={data_type}&from={from_date}&to={to_date}"
+        url = self.host + f"/api-five/v1/metrics?data-type={data_type}&from={from_date}&to={to_date}"
         response = requests.get(url)
         if response.status_code == status.HTTP_200_OK:
             return FiveStarRepositoryResponse(True, response.content)

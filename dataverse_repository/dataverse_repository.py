@@ -42,7 +42,7 @@ class DataverseRepository:
         if 'dwcEventTime' in params:
             dwcEventTime = params['dwcEventTime']
             years = [year[:4] for year in dwcEventTime]
-            final_params['fq'].append(f'dwcEventTime:"{" TO ".join(years)}"')
+            final_params['fq'].append(f'dwcEventTime:{" TO ".join(years)}')
             params.pop('dwcEventTime')
 
         if 'geographicBoundingBox' in params:
