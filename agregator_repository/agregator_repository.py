@@ -166,7 +166,7 @@ class AgregatorRepository:
         """
         Method responsible for getting metrics for specified data type
         """
-        return self.__dataverse_repository.get_all_metrics_total(from_date, to_date, data_type)
+        return self.__dataverse_repository.get_all_metrics_total(data_type, from_date, to_date)
 
     def get_faq(self, language: str):
         return self.__backend_cms_repository.get_faq(language)

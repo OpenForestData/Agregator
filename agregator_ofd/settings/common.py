@@ -152,3 +152,4 @@ REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD')
 REDIS_EXPIRES_TIME_IN_SECONDS = int(os.environ.get('REDIS_EXPIRES_TIME_IN_SECONDS', 1))
 
 METRICS_DATAVERSE_TYPES = ['dataverses', 'datasets', 'files', 'downloads']
+FIVE_STAR_REPOSITORY_URL = os.environ.get('FIVE_STAR_REPOSITORY_URL', "")

@@ -218,26 +218,14 @@ class DataverseRepository:
         """
         return f'{DATAVERSE_URL}/api/access/datafile/{file_id}'
 
-    def get_all_metrics_total(self, from_date, to_date, data_type):
+    def get_all_metrics_total(self, data_type, from_date, to_date):
         """
         Method responsible for obtaining all objects in datavers
         count from dataverse, also responsible for making all requests and
         join responses based on
         """
-
-        # years_and_months = []
-        # try:
-        #     dates = ["2020-01", "2020-08"]
-        #     start, end = [datetime.strptime(_, "%Y-%M") for _ in dates]
-        #     total_months = lambda dt: dt.month + 12 * dt.year
-        #     mlist = []
-        #     for tot_m in xrange(total_months(start) - 1, total_months(end)):
-        #         y, m = divmod(tot_m, 12)
-        #         mlist.append(datetime(y, m + 1, 1).strftime("%b-%y"))
-        # except Exception:
-        #     pass
-        # return self.get_metrics_total(data_type, to_month, past_days)
-        return None
+        response = self.__client.get_metrics(data_type, from_date, to_date)
+        return response
 
     def get_metrics_total(self, data_type='dataverses', to_month=None, past_days=None):
         """

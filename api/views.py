@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from agregator_ofd.settings.common import DATASET_DETAILS_MAX_RESULTS_AMOUNT
 from agregator_repository.agregator_repository import AgregatorRepository
 from data_consistency_checker.data_consistency_checker import DataConsistencyChecker
+from five_star_repository.five_star_repository import FiveStarRepository
 
 
 class SearchView(APIView):
@@ -249,9 +250,11 @@ class Metrics(APIView):
         data_type = request.query_params.get('data-type', None)
         from_date = request.query_params.get('from', None)
         to_date = request.query_params.get('to', None)
-        agregator_repository = AgregatorRepository()
-        response = agregator_repository.get_metrics_total(from_date, to_date, data_type)
-        return JsonResponse(response, safe=False)
+        five_star_repository = FiveStarRepository()
+        response = five_star_repository.get_metrics(data_type, from_date, to_date)
+        if response.is_success():
+            return JsonResponse(json.loads(response.get_data()), safe=False)
+        return HttpResponse("Service unavailable", status=status.HTTP_400_BAD_REQUEST)
 
 
 class ContactSendMailSerializer(serializers.Serializer):
