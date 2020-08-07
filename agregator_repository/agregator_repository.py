@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.urls import reverse
 
 from agregator_ofd.settings.common import IMG_PROXY_THUMBNAILS_CREATION_MIME_TYPES
@@ -159,7 +161,7 @@ class AgregatorRepository:
         Method responsible for getting dataset of the day
         """
         media_datasets = self.__dataverse_repository.get_media_datasets()
-        dataset_of_the_day = media_datasets.data.docs[1]
+        dataset_of_the_day = media_datasets.data.docs[datetime.now().day]
         return self.get_dataset(dataset_of_the_day['identifier'])
 
     def get_metrics_total(self, from_date, to_date, data_type):

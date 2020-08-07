@@ -250,5 +250,5 @@ class DataverseRepository:
         """
         return self.__client.search('*', {'fq': ['publicationStatus:Published',
                                                  '{!join from=parentIdentifier to=identifier}fileContentType:image*',
-                                                 'dvObjectType:datasets'], 'start': ['0'], 'rows': ['15'],
+                                                 'dvObjectType:datasets'], 'start': ['0'], 'rows': ['31'],
                                           'sort': ['title asc']})
