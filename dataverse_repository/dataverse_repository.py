@@ -1,6 +1,7 @@
 import copy
 
 import pysolr
+from django.http import QueryDict
 from pyDataverse.api import Api
 
 from agregator_ofd.settings.common import DATAVERSE_URL, SOLR_COLLECTION_URL
@@ -30,7 +31,7 @@ class DataverseRepository:
         """
         q = "*"
         final_params = {'fq': ['publicationStatus:Published']}
-        params = dict(copy.deepcopy(params).lists())
+        params = dict(copy.deepcopy(params).lists() if isinstance(params, QueryDict) else params)
         # ensure no facet fields sent
         if 'facet.field' in params:
             params.pop('facet.field')

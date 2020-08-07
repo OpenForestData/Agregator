@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.http import QueryDict
 from django.urls import reverse
 
 from agregator_ofd.settings.common import IMG_PROXY_THUMBNAILS_CREATION_MIME_TYPES
@@ -23,6 +24,9 @@ class AgregatorRepository:
         self.__backend_cms_repository = BackendCmsRepository()
 
     def get_dataset(self, identifier: str) -> dict:
+        query_dict = QueryDict('', mutable=True)
+        query_dict.update()
+        dataset_search_data = self.__dataverse_repository.search({'identifier': ["*" + identifier[4:]]})
         dataset_data = self.__dataverse_repository.get_dataset_details(identifier)
         files_from_dataset = dataset_data.get('latestVersion', {}).get('files', None) if dataset_data else None
         if files_from_dataset:
@@ -36,6 +40,7 @@ class AgregatorRepository:
                         'contentType', '') in IMG_PROXY_THUMBNAILS_CREATION_MIME_TYPES:
                     file['thumbnail_url'] = reverse('api:download_thumbnail',
                                                     kwargs={'file_id': data_file.get('id', None)})
+        dataset_data['search_info'] = dataset_search_data if dataset_search_data else None
         return dataset_data
 
     def get_datasets(self, identifiers_list: list) -> dict:
