@@ -36,6 +36,7 @@ def test_response_data_no_success(data):
     response = BackendCmsRepositoryResponse(False, data)
     assert response.get_data() == {}
 
+
 @pytest.mark.parametrize(
     'data', [1, -0.5, 'data', [1, 2, 3], None, False, {'id': 1, 'name': 'Janek', 'male': False}]
 )

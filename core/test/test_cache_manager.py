@@ -35,7 +35,7 @@ def test_cache_manager_get_absent(cm, name):
     """
     Tests get function on absent names
     """
-    assert cm.get(name) == None
+    assert cm.get(name) is None
 
 
 @pytest.mark.parametrize(
