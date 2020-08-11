@@ -86,6 +86,8 @@ class DataverseRepository:
             else:
                 final_params['sort'] = ['title asc']
             params.pop('sort')
+        else:
+            final_params['sort'] = ['dateSort desc']
 
         media_static = params.get('mediaStatic', None)
         geo_static = params.get('geoStatic', None)
@@ -94,7 +96,6 @@ class DataverseRepository:
             params.pop('mediaStatic')
         if geo_static:
             params['dwcDecimalLatitude'] = ["*"]
-            # TODO: dodac jeszcze geospatial bounding box
             params['dwcDecimalLatitude'] = ["*"]
             params.pop('geoStatic')
 
@@ -130,6 +131,7 @@ class DataverseRepository:
 
     @cached
     def get_resource(self, resource_id: str):
+
         solr_response = self.__client.search("*", {'fq': ['dvObjectType:files', f'entityId:{resource_id}']})
         resource = solr_response.get_result()
         if len(resource) > 0:
