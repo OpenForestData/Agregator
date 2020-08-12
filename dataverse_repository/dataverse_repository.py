@@ -81,7 +81,7 @@ class DataverseRepository:
             params.pop('category')
 
         if 'sort' in params:
-            if params['sort'] == 'desc':
+            if params['sort'] == ['desc']:
                 final_params['sort'] = ['title desc']
             else:
                 final_params['sort'] = ['title asc']
