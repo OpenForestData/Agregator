@@ -32,8 +32,12 @@ class AgregatorRepository:
         if files_from_dataset:
             for file in files_from_dataset:
                 data_file = file.get('dataFile', {})
-                url_to_download_file = self.__dataverse_repository.get_url_to_file(
-                    data_file.get('id', None))
+                if 'text/tab' in data_file.get('contentType', ""):
+                    url_to_download_file = self.__dataverse_repository.get_url_to_file(
+                        data_file.get('id', None), format='original')
+                else:
+                    url_to_download_file = self.__dataverse_repository.get_url_to_file(
+                        data_file.get('id', None))
                 file['download_url'] = url_to_download_file
                 # create thumbnail if mime type is correct
                 if data_file.get(

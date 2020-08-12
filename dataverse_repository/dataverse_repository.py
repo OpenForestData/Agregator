@@ -214,11 +214,13 @@ class DataverseRepository:
             data[identifier] = self.get_datafile_metadata(identifier)
         return data
 
-    def get_url_to_file(self, file_id: int) -> str:
+    def get_url_to_file(self, file_id: int, format=None) -> str:
         """
         Method responisble for getting api url
         to get - download file
         """
+        if format:
+            return f'{DATAVERSE_URL}/api/access/datafile/{file_id}?format={format}'
         return f'{DATAVERSE_URL}/api/access/datafile/{file_id}'
 
     def get_all_metrics_total(self, data_type, from_date, to_date):
