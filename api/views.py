@@ -2,11 +2,12 @@ import json
 import mimetypes
 
 import requests
+from django.core.mail import send_mail
 from django.http import JsonResponse, HttpResponse, StreamingHttpResponse
 from rest_framework import status, serializers
 from rest_framework.views import APIView
 
-from agregator_ofd.settings.common import DATASET_DETAILS_MAX_RESULTS_AMOUNT
+from agregator_ofd.settings.common import DATASET_DETAILS_MAX_RESULTS_AMOUNT, RECAPTCHA_SECRET, DEFAULT_FROM_EMAIL
 from agregator_repository.agregator_repository import AgregatorRepository
 from data_consistency_checker.data_consistency_checker import DataConsistencyChecker
 from five_star_repository.five_star_repository import FiveStarRepository
@@ -267,12 +268,31 @@ class ContactSendMailSerializer(serializers.Serializer):
 
 class Contact(APIView):
     """
-    Class responsible for sending e-mails
+    Class responsible for sending e-mails based on user's
+    feedback
     """
     serializer_class = ContactSendMailSerializer
 
     def post(self, request):
-        serializers = ContactSendMailSerializer(data=request.data)
-        if not serializers.is_valid(raise_exception=True):
-            return HttpResponse(status=status.HTTP_400_BAD_REQUEST, content=serializers.error_messages)
-        return JsonResponse({'success': "Successfully sent message"})
+        serializer = ContactSendMailSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            recaptcha_response = requests.post("https://www.google.com/recaptcha/api/siteverify",
+                                               data={'secret': RECAPTCHA_SECRET,
+                                                     'response': serializer.data.get('recaptcha_response')})
+            response_captcha = json.loads(recaptcha_response.content)
+            if response_captcha['success']:
+                mail_sent = send_mail(
+                    f"Nowe zgłoszenie od {serializer.data.get('name')} {serializer.data.get('last_name')}",
+                    serializer.data.get('content'),
+                    DEFAULT_FROM_EMAIL,
+                    [serializer.data.get('e_mail')],
+                    fail_silently=False,
+                    html_message=serializer.data.get('content'))
+                if not mail_sent:
+                    response = {'error': "Could not send message"}
+                else:
+                    response = {'success': "Successfully sent message"}
+            else:
+                response = {'error': "Wrong recaptcha. Try again"}
+            return JsonResponse(response)
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST, content=serializer.error_messages)

@@ -153,3 +153,13 @@ REDIS_EXPIRES_TIME_IN_SECONDS = int(os.environ.get('REDIS_EXPIRES_TIME_IN_SECOND
 
 METRICS_DATAVERSE_TYPES = ['dataverses', 'datasets', 'files', 'downloads']
 FIVE_STAR_REPOSITORY_URL = os.environ.get('FIVE_STAR_REPOSITORY_URL', "")
+
+RECAPTCHA_SECRET = os.environ.get('RECAPTCHA_SECRET')
+
+EMAIL_HOST = os.environ.get('EMAIL_HOST', "")
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', "")
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', "")
+EMAIL_PORT = os.environ.get('EMAIL_PORT', "")
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', "")
+EMAIl_USE_SSL = os.environ.get('EMAIl_USE_SSL', "")
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', "")

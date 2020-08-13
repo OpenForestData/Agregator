@@ -17,7 +17,7 @@ class BackendCmsClient:
     def __init__(self):
         self.host = BACKEND_CMS_URL
 
-    def get_facet_fields(self, language):
+    def get_facet_fields(self, language) -> BackendCmsRepositoryResponse:
         """
         Method responsible for obtaining facet fields
         from backend cms
@@ -33,7 +33,7 @@ class BackendCmsClient:
             parsed_data = None
         return BackendCmsRepositoryResponse(True, parsed_data)
 
-    def get_menu(self, language):
+    def get_menu(self, language) -> BackendCmsRepositoryResponse:
         """
         Method responsible for geting menu nodes
         from backend cms
@@ -92,7 +92,7 @@ class BackendCmsClient:
             return BackendCmsRepositoryResponse(True, None)
         return BackendCmsRepositoryResponse(False, None)
 
-    def register_metadata_blocks(self, metadata_blocks_list):
+    def register_metadata_blocks(self, metadata_blocks_list) -> BackendCmsRepositoryResponse:
         """
         Method responsible for registering metadata blocks
         from dataverse in backend cms
@@ -103,7 +103,7 @@ class BackendCmsClient:
             return BackendCmsRepositoryResponse(True, None)
         return BackendCmsRepositoryResponse(False, None)
 
-    def get_blog_index(self, language, page=1, limit=6, keywords_slug=None):
+    def get_blog_index(self, language, page=1, limit=6, keywords_slug=None) -> BackendCmsRepositoryResponse:
         """
         Method responsible for obtaining blog index page
         """
@@ -115,7 +115,7 @@ class BackendCmsClient:
             return BackendCmsRepositoryResponse(True, response.text)
         return BackendCmsRepositoryResponse(False, None)
 
-    def get_news_index(self, language, page=1, limit=6):
+    def get_news_index(self, language, page=1, limit=6) -> BackendCmsRepositoryResponse:
         """
         Method responsible for obtaining news index page
         """
@@ -125,7 +125,7 @@ class BackendCmsClient:
             return BackendCmsRepositoryResponse(True, response.text)
         return BackendCmsRepositoryResponse(False, None)
 
-    def get_blog_details(self, slug):
+    def get_blog_details(self, slug) -> BackendCmsRepositoryResponse:
         """
         Method responsible for obtaining blog details about
         article
@@ -136,7 +136,7 @@ class BackendCmsClient:
             return BackendCmsRepositoryResponse(True, response.text)
         return BackendCmsRepositoryResponse(False, None)
 
-    def get_blog_keyword_list(self, slug):
+    def get_blog_keyword_list(self, slug) -> BackendCmsRepositoryResponse:
         """
         Method responsible for obtaining blog keyword articles list
         """
@@ -146,7 +146,7 @@ class BackendCmsClient:
             return BackendCmsRepositoryResponse(True, response.text)
         return BackendCmsRepositoryResponse(False, None)
 
-    def get_home(self, language: str):
+    def get_home(self, language: str) -> BackendCmsRepositoryResponse:
         """
         Method responsible for getting all main page (home) informations
         """
@@ -156,7 +156,7 @@ class BackendCmsClient:
             return BackendCmsRepositoryResponse(True, response.text)
         return BackendCmsRepositoryResponse(False, None)
 
-    def get_faq(self, language: str):
+    def get_faq(self, language: str) -> BackendCmsRepositoryResponse:
         """
         Method responsible for getting all faqs informations
         """
