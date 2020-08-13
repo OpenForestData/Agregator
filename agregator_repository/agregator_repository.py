@@ -106,10 +106,10 @@ class AgregatorRepository:
             if resource_details:
                 if 'text/tab' in resource_details.get('fileContentType', ""):
                     url_to_download_file = self.__dataverse_repository.get_url_to_file(
-                        resource_details.get('id', None), format='original')
+                        resource_details.get('entityId', None), format='original')
                 else:
                     url_to_download_file = self.__dataverse_repository.get_url_to_file(
-                        resource_details.get('id', None))
+                        resource_details.get('entityId', None))
                 if resource_details['fileTypeDisplay'] == 'Unknown':
                     resource_details['fileTypeDisplay'] = resource_details['name'].split(".")[-1]
                 response['details'] = resource_details
