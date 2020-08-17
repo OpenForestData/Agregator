@@ -6,7 +6,7 @@ from django.urls import reverse
 from agregator_ofd.settings.common import IMG_PROXY_THUMBNAILS_CREATION_MIME_TYPES
 from backend_cms_repository.backend_cms_repository import BackendCmsRepository
 from dataverse_repository.dataverse_repository import DataverseRepository
-from img_proxy_client.img_proxy_client import ImgProxyClient
+from img_proxy_client import ImgProxyClient
 
 
 # TODO add loggers

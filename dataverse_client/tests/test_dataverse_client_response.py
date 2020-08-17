@@ -4,7 +4,7 @@ import pytest
 from requests.models import Response
 from pysolr import Results
 
-from dataverse_client.dataverse_repository_response import DataverseClientResponse, \
+from dataverse_client.dataverse_client_response import DataverseClientResponse, \
     DataverseClientSearchResponse, DataverseDetailDatasetClientResponse, DataverseDataFileMetadataResponse
 
 
@@ -34,7 +34,7 @@ def test_response_is_success(is_success):
     """
     Tests checking does the request has finished with success
     """
-    response = DataverseClientResponse(is_success, {'type': 'test'})
+    response = DataverseClientResponse(is_success, {'type': 'tests'})
     assert response.is_success == is_success
 
 

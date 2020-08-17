@@ -1,5 +1,5 @@
 from backend_cms_repository.backend_cms_client import BackendCmsClient
-from cache_manager.cache_manager import cached
+from cache_manager.main import cached
 
 
 class BackendCmsRepository:

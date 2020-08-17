@@ -13,9 +13,9 @@ DEVELOPMENT_SETTINGS = {
 
 TEST_SETTINGS = {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': 'test',
-    'USER': 'test',
-    'PASSWORD': 'test',
+    'NAME': 'tests',
+    'USER': 'tests',
+    'PASSWORD': 'tests',
     'HOST': '0.0.0.0',
     'PORT': '5432',
 }

@@ -6,7 +6,7 @@ import pysolr
 from rest_framework import status
 
 from agregator_ofd.settings.common import DATAVERSE_URL, METRICS_DATAVERSE_TYPES
-from dataverse_client.dataverse_repository_response import DataverseClientResponse, \
+from dataverse_client.dataverse_client_response import DataverseClientResponse, \
     DataverseClientSearchResponse, DataverseDetailDatasetClientResponse, \
     DataverseDataFileMetadataResponse, DataverseMetricResponse
 from dataverse_client.exceptions import DataverseClientConnectionException

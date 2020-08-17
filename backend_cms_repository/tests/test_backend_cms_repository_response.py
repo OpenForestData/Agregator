@@ -11,7 +11,7 @@ def test_response_is_success(is_success):
     """
     Tests checking does the request has finished with success
     """
-    response = BackendCmsRepositoryResponse(is_success, {'type': 'test'})
+    response = BackendCmsRepositoryResponse(is_success, {'type': 'tests'})
     assert response.is_success() == is_success
 
 

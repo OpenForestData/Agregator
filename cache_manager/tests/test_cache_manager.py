@@ -1,6 +1,6 @@
 import pytest
 
-from cache_manager.cache_manager import CacheManager, cached
+from ..main import CacheManager, cached
 
 
 class Add:
@@ -40,7 +40,7 @@ def test_cache_manager_get_absent(cm, name):
 
 @pytest.mark.parametrize(
     'name,value',
-    [('string', 'test'), ('int', -1), ('float', 0.5), ('None', None), ('list', [1, 2, 3]), ('dict', {'test': 1})]
+    [('string', 'tests'), ('int', -1), ('float', 0.5), ('None', None), ('list', [1, 2, 3]), ('dict', {'tests': 1})]
 )
 def test_cache_manager_get(cm, name, value):
     """
@@ -53,7 +53,7 @@ def test_cache_manager_get(cm, name, value):
 
 @pytest.mark.parametrize(
     'name,value',
-    [('rep', 'test'), ('rep', -1), ('rep', 0.5), ('rep', None), ('rep', [1, 2, 3]), ('rep', {'test': 1})]
+    [('rep', 'tests'), ('rep', -1), ('rep', 0.5), ('rep', None), ('rep', [1, 2, 3]), ('rep', {'tests': 1})]
 )
 def test_cache_replace(cm, name, value):
     """

@@ -6,7 +6,7 @@ from pyDataverse.api import Api
 
 from agregator_ofd.settings.common import DATAVERSE_URL, SOLR_COLLECTION_URL
 from backend_cms_repository.backend_cms_repository import BackendCmsRepository
-from cache_manager.cache_manager import CacheManager, cached
+from cache_manager.main import CacheManager, cached
 from dataverse_client.dataverse_client import DataverseClient
 
 
