@@ -68,6 +68,15 @@ class DataverseClientSearchResponse(DataverseClientResponse):
         except Exception:
             return []
 
+    def get_first_result(self):
+        """
+        Get first result in solr search resposne
+        """
+        try:
+            return self.data.docs[0]
+        except Exception:
+            return None
+
     def get_number_of_results(self) -> int:
         """
         Gets full amount of objects
@@ -86,12 +95,13 @@ class DataverseDetailDatasetClientResponse(DataverseClientResponse):
 
     def get_json_data(self):
         try:
-            return json.loads(self.data)['data']
+            return self.data
         except Exception:
             return {}
 
     def prepare_format(self):
-        data_basic_format = self.get_json_data()
+        solr_response = self.get_json_data()['solr_response']
+        data_basic_format = self.get_json_data()['data']
         data_basic_format['alternativeURL'] = ""
         data_basic_format['providers'] = []
         try:
@@ -107,6 +117,10 @@ class DataverseDetailDatasetClientResponse(DataverseClientResponse):
                 data_basic_format['providers'] = fields['author']['value']
             except AttributeError:
                 pass
+        if 'dvName' in solr_response:
+            data_basic_format['dvName'] = solr_response['dvName']
+        if 'identifierOfDataverse' in solr_response:
+            data_basic_format['identifierOfDataverse'] = solr_response['identifierOfDataverse']
         return data_basic_format
 
 

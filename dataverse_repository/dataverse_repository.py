@@ -257,3 +257,6 @@ class DataverseRepository:
                                                  '{!join from=parentIdentifier to=identifier}fileContentType:image*',
                                                  'dvObjectType:datasets'], 'start': ['0'], 'rows': ['31'],
                                           'sort': ['title asc']})
+
+    def get_dataverse_details(self):
+        return None

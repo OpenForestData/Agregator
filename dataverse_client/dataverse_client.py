@@ -1,3 +1,5 @@
+import json
+
 import requests
 from pyDataverse.api import Api
 import pysolr
@@ -8,9 +10,6 @@ from dataverse_client.dataverse_repository_response import DataverseClientRespon
     DataverseClientSearchResponse, DataverseDetailDatasetClientResponse, \
     DataverseDataFileMetadataResponse, DataverseMetricResponse
 from dataverse_client.exceptions import DataverseClientConnectionException
-
-
-# TODO add loggers
 
 
 class DataverseClient:
@@ -48,9 +47,16 @@ class DataverseClient:
         Protected method responsible for obtaining dataset data
         based on identifier
         """
+        data = None
         response_from_dataverse = self.__dataverse_client.get_dataset(identifier)
+        if response_from_dataverse.status_code == status.HTTP_200_OK:
+            data = json.loads(response_from_dataverse.content)
+        if data:
+            response_from_solr = self.search("*", {'fq': ['dvObjectType:datasets', f'identifier:*{identifier[4:]}']})
+            if response_from_solr.is_success:
+                data['solr_response'] = response_from_solr.get_first_result()
         success = True if response_from_dataverse.status_code == requests.codes.ok else False
-        return DataverseDetailDatasetClientResponse(success, response_from_dataverse.content)
+        return DataverseDetailDatasetClientResponse(success, data)
 
     def __create_search_params(self, params: dict = None) -> dict:
         """
