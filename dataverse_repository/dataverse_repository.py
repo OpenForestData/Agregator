@@ -105,7 +105,7 @@ class DataverseRepository:
             if isinstance(values, str):
                 new_fquery = f'{key}:"{values}"'
             else:
-                new_fquery = f'{key}:{" OR ".join([f"{value}" for value in values])}'
+                new_fquery = f'{key}:' + " OR ".join([f'"{value}"' for value in values])
             final_params['fq'].append(new_fquery)
         return q, final_params
 
@@ -115,7 +115,7 @@ class DataverseRepository:
         """
         # ensure params are in proper format
         query, params = self.__prepare_params(params, search_type=search_type)
-        # TODO get out as param facet_fields_list
+
         # get search params from backend cms
         search_params = {'facet.field': facet_filterable_fields}
 

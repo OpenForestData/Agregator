@@ -38,10 +38,11 @@ class AgregatorRepository:
                 file['download_url'] = url_to_download_file
                 # create thumbnail if mime type is correct
                 if data_file.get(
-                        'contentType', '') in IMG_PROXY_THUMBNAILS_CREATION_MIME_TYPES:
+                        'contentType', 'wrongValueNotInKeys') in IMG_PROXY_THUMBNAILS_CREATION_MIME_TYPES:
                     file['thumbnail_url'] = reverse('api:download_thumbnail',
                                                     kwargs={'file_id': data_file.get('id', None)})
-        dataset_data['search_info'] = dataset_search_data if dataset_search_data else None
+        if dataset_search_data:
+            dataset_data['search_info'] = dataset_search_data
         return dataset_data
 
     def get_datasets(self, identifiers_list: list) -> dict:
@@ -95,8 +96,6 @@ class AgregatorRepository:
         Method responsible for preparing response with
         metadata about resources based on their identifiers
         """
-        # TODO wywalic wersje, nie robić
-        # TODO dodajemy dataset na podstawie dataset
         response = {}
         for id in resources_ids:
             resource_details = self.__dataverse_repository.get_resource(id)
@@ -110,8 +109,11 @@ class AgregatorRepository:
                 if resource_details['fileTypeDisplay'] == 'Unknown':
                     resource_details['fileTypeDisplay'] = resource_details['name'].split(".")[-1]
                 response['details'] = resource_details
-                response['dataset_details'] = self.__dataverse_repository.get_dataset_details(
+                dataset_details = self.__dataverse_repository.get_dataset_details(
                     resource_details['parentIdentifier'])
+                response['dataset_details'] = dataset_details
+                files = {file['id']: file['originalFileFormat'] for file in dataset_details['files']}
+                # response['details']['originalFileFormat'] = files
                 response['download_url'] = url_to_download_file
         return response
 
@@ -121,8 +123,7 @@ class AgregatorRepository:
         based on img proxy
         """
         url_to_download_file = self.__dataverse_repository.get_url_to_file(file_id)
-        url_thumbnail = self.__img_proxy_client.create_thumbnail_url(url_to_download_file, 100,
-                                                                     0)
+        url_thumbnail = self.__img_proxy_client.create_thumbnail_url(url_to_download_file, 100, 0)
         return url_thumbnail, str(file_id)
 
     def get_metadata(self):
