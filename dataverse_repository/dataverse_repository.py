@@ -25,7 +25,7 @@ class DataverseRepository:
         # TODO delete backend_cms repository
         self.__cache = CacheManager()
 
-    def __prepare_params(self, params: dict, search_type='datasets') -> (str, dict):
+    def __prepare_params(self, params: dict, search_type='datasets', exact=True) -> (str, dict):
         """
         Prepare proper params based on api client
         """
@@ -105,16 +105,19 @@ class DataverseRepository:
             if isinstance(values, str):
                 new_fquery = f'{key}:"{values}"'
             else:
-                new_fquery = f'{key}:' + " OR ".join([f'"{value}"' for value in values])
+                if exact:
+                    new_fquery = f'{key}:' + " OR ".join([f'"{value}"' for value in values])
+                else:
+                    new_fquery = f'{key}:{" OR ".join([f"{value}" for value in values])}'
             final_params['fq'].append(new_fquery)
         return q, final_params
 
-    def search(self, params: dict = None, facet_filterable_fields=[], search_type='datasets') -> dict:
+    def search(self, params: dict = None, facet_filterable_fields=[], search_type='datasets', exact=True) -> dict:
         """
         Prepare response with all required elements
         """
         # ensure params are in proper format
-        query, params = self.__prepare_params(params, search_type=search_type)
+        query, params = self.__prepare_params(params, search_type=search_type, exact=exact)
 
         # get search params from backend cms
         search_params = {'facet.field': facet_filterable_fields}

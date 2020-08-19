@@ -23,7 +23,7 @@ class AgregatorRepository:
     def get_dataset(self, identifier: str) -> dict:
         query_dict = QueryDict('', mutable=True)
         query_dict.update()
-        dataset_search_data = self.__dataverse_repository.search({'identifier': ["*" + identifier[4:]]})
+        dataset_search_data = self.__dataverse_repository.search({'identifier': ["*" + identifier[4:]]}, exact=False)
         dataset_data = self.__dataverse_repository.get_dataset_details(identifier)
         files_from_dataset = dataset_data.get('latestVersion', {}).get('files', None) if dataset_data else None
         if files_from_dataset:
@@ -112,7 +112,8 @@ class AgregatorRepository:
                 dataset_details = self.__dataverse_repository.get_dataset_details(
                     resource_details['parentIdentifier'])
                 response['dataset_details'] = dataset_details
-                # files = {file['id']: file['originalFileFormat'] for file in dataset_details['files']}
+                files = {str(file['dataFile']['id']): file['label'] for file in dataset_details['latestVersion']['files']}
+                response['details']['originalFileFormat'] = files.get(id, "").split('.')[-1]
                 # response['details']['originalFileFormat'] = files
                 response['download_url'] = url_to_download_file
         return response
