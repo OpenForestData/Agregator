@@ -18,7 +18,7 @@ sonarqube:
     stage: sonarqube
     before_script: []
     script:
-        - sonar-scanner -Dsonar.projectKey=agregator Dsonar.sources=. -Dsonar.host.url=https://sonarqube.whiteaster.com -Dsonar.login=9d043276577f7d44af007b3ef2d612a647c452cf      
+        - sonar-scanner -Dsonar.projectKey=agregator -Dsonar.sources=. -Dsonar.host.url=https://sonarqube.whiteaster.com -Dsonar.login=9d043276577f7d44af007b3ef2d612a647c452cf      
     only:
         - master
 
