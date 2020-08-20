@@ -2,6 +2,7 @@ image: python:3.6-slim-buster
 
 stages:
     - sonarqube
+    - documentation
     - code checks
     - build
 
@@ -20,6 +21,34 @@ sonarqube:
         - sonar-scanner Dsonar.projectKey=agregator Dsonar.sources=. Dsonar.host.url=https://sonarqube.whiteaster.com Dsonar.login=9d043276577f7d44af007b3ef2d612a647c452cf      
     only:
         - master
+
+Sphinx documentation development:
+  stage: documentation
+  script:
+    - pip install sphinx sphinx_rtd_theme sphinx-autodoc-typehints sphinxcontrib.httpdomain
+    - cd docs/
+    - make html
+  artifacts:
+    paths:
+        - _build/html
+    expire_in: 3 day
+  only:
+    - branches
+  except:
+    - master
+
+Sphinx documentation:
+  stage: documentation
+  script:
+    - pip install sphinx sphinx_rtd_theme sphinx-autodoc-typehints sphinxcontrib.httpdomain
+    - cd docs/
+    - make html
+  artifacts:
+    paths:
+      - _build/html
+    expire_in: 30 day
+  only:
+    - master
 
 PyLint:
     stage: code checks
@@ -56,6 +85,7 @@ Safety:
     script:
         - pip install safety
         - safety check -r requirements.txt
+
 
 Build docker dev image:
     image: 
