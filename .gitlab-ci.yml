@@ -1,0 +1,112 @@
+image: python:3.6-slim-buster
+
+stages:
+    - sonarqube
+    - documentation
+    - code checks
+    - build
+
+
+before_script:
+    - apt update
+    - apt install git python3-dev libpq-dev libsasl2-dev build-essential gcc -y
+    - pip install -U pip
+    - pip install --ignore-installed -r requirements.txt
+
+sonarqube:
+    image: sonarsource/sonar-scanner-cli
+    stage: sonarqube
+    before_script: []
+    script:
+        - sonar-scanner Dsonar.projectKey=agregator Dsonar.sources=. Dsonar.host.url=https://sonarqube.whiteaster.com Dsonar.login=9d043276577f7d44af007b3ef2d612a647c452cf      
+    only:
+        - master
+
+Sphinx documentation development:
+  stage: documentation
+  script:
+    - pip install sphinx sphinx_rtd_theme sphinx-autodoc-typehints sphinxcontrib.httpdomain
+    - cd docs/
+    - make html
+  artifacts:
+    paths:
+        - _build/html
+    expire_in: 3 day
+  only:
+    - branches
+  except:
+    - master
+
+Sphinx documentation:
+  stage: documentation
+  script:
+    - pip install sphinx sphinx_rtd_theme sphinx-autodoc-typehints sphinxcontrib.httpdomain
+    - cd docs/
+    - make html
+  artifacts:
+    paths:
+      - _build/html
+    expire_in: 30 day
+  only:
+    - master
+
+PyLint:
+    stage: code checks
+    allow_failure: true
+    script:
+        - pip install pylint pylint_django
+        - pylint --rcfile ./.pylintrc api core agregator_ofd agregator_repository backend_cms_repository cache_manager data_consistency_checker dataverse_client dataverse_repository img_proxy_client
+
+Flake8:
+    stage: code checks
+    before_script:
+        - echo "pass"    
+    script:
+        - apt update && apt install git -y
+        - pip install flake8
+        - flake8 .
+
+Piprot:
+    stage: code checks
+    allow_failure: true
+    script:
+        - pip install piprot
+        - piprot
+
+PipCheck:
+    stage: code checks
+    allow_failure: true
+    script:
+        - pip check
+
+Safety:
+    stage: code checks
+    allow_failure: true
+    script:
+        - pip install safety
+        - safety check -r requirements.txt
+
+
+Build docker dev image:
+    image: 
+        name: gcr.io/kaniko-project/executor:debug
+        entrypoint: [""]
+    before_script: []
+    stage: build
+    script:
+        - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"gitlab-ci-token\",\"password\":\"$CI_JOB_TOKEN\"}}}" > /kaniko/.docker/config.json
+        - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH
+    except:
+        - master
+
+Build docker master image:
+    image: 
+        name: gcr.io/kaniko-project/executor:debug
+        entrypoint: [""]
+    before_script: []
+    stage: build
+    script:
+        - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"gitlab-ci-token\",\"password\":\"$CI_JOB_TOKEN\"}}}" > /kaniko/.docker/config.json
+        - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --destination $CI_REGISTRY_IMAGE:latest
+    only:
+        - master
