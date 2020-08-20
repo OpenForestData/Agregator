@@ -25,13 +25,20 @@ urlpatterns = [
     # /api/v1/dataset-of-the-day
     path('dataset-of-the-day', api_views.DatasetOfTheDay.as_view(), name='dataset_of_the_day'),
     # API CMS ENDPOINTS - BLOG, PAGES, CONTENT ETC...
+    # /api/v1/contact
     path('contact', api_views.Contact.as_view(), name='contact'),
-    # /api/v1/pages
+    # /api/v1/faq
     path('faq', api_views.Faq.as_view(), name='cms_faq'),
+    # /api/v1/home
     path('home', api_views.HomeView.as_view(), name='cms_home_view'),
+    # /api/v1/pages
     path('pages', api_views.PageDetailsView.as_view(), name='cms_page_details'),
+    # /api/v1/blog
     path('blog', api_views.BlogListView.as_view(), name='cms_blog_index'),
+    # /api/v1/blog-slug
     path('blog-slug', api_views.BlogDetails.as_view(), name='cms_blog_details'),
+    # /api/v1/news
     path('news', api_views.NewsListView.as_view(), name='cms_news_index'),
+    # /api/v1/news-slug
     path('news-slug', api_views.NewsDetails.as_view(), name='cms_news_details'),
 ]

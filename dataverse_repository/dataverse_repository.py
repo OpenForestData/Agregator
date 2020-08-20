@@ -10,9 +10,6 @@ from cache_manager.main import CacheManager, cached
 from dataverse_client.dataverse_client import DataverseClient
 
 
-# TODO add loggers
-
-
 class DataverseRepository:
     """
     Class responsible handling all requests for dataverse api

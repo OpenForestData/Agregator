@@ -38,7 +38,7 @@ class DataverseClient:
 
     def get_dataset_details(self, dataset_id: str) -> DataverseDetailDatasetClientResponse:
         """
-        Method responsible for getting datased base on oid
+        Method responsible for getting dataset base on oid
         """
         return self.__get_dataset_details(dataset_id)
 

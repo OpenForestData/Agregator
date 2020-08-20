@@ -112,7 +112,8 @@ class AgregatorRepository:
                 dataset_details = self.__dataverse_repository.get_dataset_details(
                     resource_details['parentIdentifier'])
                 response['dataset_details'] = dataset_details
-                files = {str(file['dataFile']['id']): file['label'] for file in dataset_details['latestVersion']['files']}
+                files = {str(file['dataFile']['id']): file['dataFile']['filename'] for file in
+                         dataset_details['latestVersion']['files']}
                 response['details']['originalFileFormat'] = files.get(id, "").split('.')[-1]
                 # response['details']['originalFileFormat'] = files
                 response['download_url'] = url_to_download_file

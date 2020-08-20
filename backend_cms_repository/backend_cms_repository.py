@@ -3,7 +3,6 @@ from cache_manager.main import cached
 
 
 class BackendCmsRepository:
-    # TODO add loggers
     """
     Class responsible for communication with backend cms
     and obtaining all informations

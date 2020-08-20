@@ -259,6 +259,10 @@ class Metrics(APIView):
 
 
 class ContactSendMailSerializer(serializers.Serializer):
+    """
+    Serializer responsible for checking data for form
+    e-mail ticket sending
+    """
     name = serializers.CharField(max_length=20)
     last_name = serializers.CharField(max_length=20)
     e_mail = serializers.EmailField(max_length=30)

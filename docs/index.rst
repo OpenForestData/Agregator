@@ -10,12 +10,16 @@ Welcome to Collection Editor documentation!
    :maxdepth: 2
 
    modules/installation.rst
-   modules/configuration.rst
-   modules/views.rst
-   modules/clients.rst
+   modules/agregator_repository.rst
+   modules/dataverse_repository.rst
+   modules/dataverse_client.rst
+   modules/data_consistency_checker.rst
+   modules/backend_cms_repository.rst
    modules/serializers.rst
-   modules/utilities.rst
-   modules/about.rst
+   modules/views.rst
+   modules/cache.rst
+
+
 
 
 Indices and tables
