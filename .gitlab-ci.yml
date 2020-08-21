@@ -114,7 +114,7 @@ test:
         - apt-get install -y --no-install-recommends gcc git build-essential libsasl2-dev python3-dev libldap2-dev libssl-dev ldap-utils
         - pip install -r requirements.txt
         - pip install pytest pytest-cov pytest-pythonpath pytest-django
-        - pytest -v --cov-report term-missing --cov-report xml:cov.xml --cov
+        - pytest --cov-report term-missing --cov-report xml:cov.xml --cov
     coverage: /^TOTAL.*\s+(\d+\%)$/
     artifacts:
         paths:
