@@ -116,6 +116,7 @@ test:
         - pip install pytest pytest-cov pytest-pythonpath pytest-django
         - pytest --cov-report term-missing --cov-report xml:cov.xml --cov
     coverage: /^TOTAL.*\s+(\d+\%)$/
+    allow_failure: true
     artifacts:
         paths:
             - cov.xml
