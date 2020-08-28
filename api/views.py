@@ -237,8 +237,11 @@ class DatasetOfTheDay(APIView):
 
     def get(self, request):
         agregator_repository = AgregatorRepository()
-        response = agregator_repository.get_dataset_of_the_day()
-        return JsonResponse(response)
+        try:
+            response = agregator_repository.get_dataset_of_the_day()
+            return JsonResponse(response)
+        except ValueError as e:
+            return HttpResponse(e, status=status.HTTP_404_NOT_FOUND)
 
 
 class Metrics(APIView):
