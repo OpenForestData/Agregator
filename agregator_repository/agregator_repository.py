@@ -177,7 +177,7 @@ class AgregatorRepository:
         media_datasets = self.__dataverse_repository.get_media_datasets()
 
         # If there aren't enough datasets with images, loop over dataset list from the start
-        dataset_index = datetime.now().day % len(media_datasets)
+        dataset_index = datetime.now().day % media_datasets.get_number_of_results()
 
         dataset_of_the_day = media_datasets.data.docs[dataset_index]
         return self.get_dataset(dataset_of_the_day['identifier'])
