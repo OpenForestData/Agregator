@@ -109,6 +109,7 @@ Safety:
 
 test:
     stage: tests
+    allow_failure: true
     script:
         - apt-get update
         - apt-get install -y --no-install-recommends gcc git build-essential libsasl2-dev python3-dev libldap2-dev libssl-dev ldap-utils
