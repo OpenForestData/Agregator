@@ -1,9 +1,25 @@
 image: python:3.6-slim-buster
 
+variables:
+    PRODUCTION: "False"
+    BACKEND_CMS_URL: "http://localhost:9999"
+    DATAVERSE_URL: "http://192.168.1.241:8080"
+    SOLR_COLLECTION_URL: "http://192.168.1.241:8985/solr/collection1"
+    DATAVERSE_KEY: "9c9d2213-482d-405d-9490-96b984b96898"
+    DATASET_DETAILS_MAX_RESULTS_AMOUNT: "5"
+    IMG_PROXY_URL: "http://localhost:8889"
+    IMG_PROXY_SALT: "9860b57da2fc4f46fe8c46e171155046"
+    IMG_PROXY_KEY: "dc493ad6c9ea84b33a4f240664c35e31"
+    REDIS_HOST: "localhost"
+    REDIS_PORT: "6379"
+    REDIS_BD: "0"
+    REDIS_PASSWORD: "gQNhn3k3dh"
+
 stages:
-    - sonarqube
-    - documentation
     - code checks
+    - documentation
+    - tests
+    - sonarqube
     - build
 
 
@@ -19,8 +35,13 @@ sonarqube:
     before_script: []
     script:
         - sonar-scanner -Dsonar.projectKey=agregator -Dsonar.sources=. -Dsonar.host.url=https://sonarqube.whiteaster.com -Dsonar.login=9d043276577f7d44af007b3ef2d612a647c452cf      
+    dependencies:
+        - test
     only:
         - master
+    needs:
+        - test
+
 
 Sphinx documentation development:
   stage: documentation
@@ -86,6 +107,22 @@ Safety:
         - pip install safety
         - safety check -r requirements.txt
 
+test:
+    stage: tests
+    allow_failure: true
+    script:
+        - apt-get update
+        - apt-get install -y --no-install-recommends gcc git build-essential libsasl2-dev python3-dev libldap2-dev libssl-dev ldap-utils
+        - pip install -r requirements.txt
+        - pip install pytest pytest-cov pytest-pythonpath pytest-django
+        - pytest --cov-report term-missing --cov-report xml:cov.xml --cov
+    coverage: /^TOTAL.*\s+(\d+\%)$/
+    artifacts:
+        paths:
+            - cov.xml
+        expire_in: 1h
+    needs:
+        - Flake8
 
 Build docker dev image:
     image: 

@@ -175,7 +175,11 @@ class AgregatorRepository:
         Method responsible for getting dataset of the day
         """
         media_datasets = self.__dataverse_repository.get_media_datasets()
-        dataset_of_the_day = media_datasets.data.docs[datetime.now().day]
+
+        # If there aren't enough datasets with images, loop over dataset list from the start
+        dataset_index = datetime.now().day % media_datasets.get_number_of_results()
+
+        dataset_of_the_day = media_datasets.data.docs[dataset_index]
         return self.get_dataset(dataset_of_the_day['identifier'])
 
     def get_metrics_total(self, from_date, to_date, data_type):
