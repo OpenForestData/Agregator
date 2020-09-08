@@ -41,8 +41,10 @@ class AgregatorRepository:
                         'contentType', 'wrongValueNotInKeys') in IMG_PROXY_THUMBNAILS_CREATION_MIME_TYPES:
                     file['thumbnail_url'] = reverse('api:download_thumbnail',
                                                     kwargs={'file_id': data_file.get('id', None)})
+
         if dataset_search_data:
             dataset_data['search_info'] = dataset_search_data
+        dataset_data['download_times'] = self.__dataverse_repository.get_resource_download_times_amount(identifier)
         return dataset_data
 
     def get_datasets(self, identifiers_list: list) -> dict:
