@@ -92,6 +92,18 @@ class DataverseClient:
             response = DataverseClientSearchResponse(False)
         return response
 
+    def download_amount(self, persistent_id: str) -> DataverseClientResponse:
+        """
+        Method responsible for obtaining download amount for each dataset or file
+        """
+        url = f"/api/datasets/:persistentId/makeDataCount/downloadsTotal?persistentId={persistent_id}"
+        response_from_dataverse = requests.get(DATAVERSE_URL + url)
+        if response_from_dataverse.status_code == status.HTTP_200_OK:
+            response = DataverseClientResponse(True, response_from_dataverse)
+        else:
+            response = DataverseClientResponse(False)
+        return response
+
     def get_metadata_blocks(self) -> DataverseClientResponse:
         """
         Method responsible for obtaining dataverse

@@ -257,3 +257,13 @@ class DataverseRepository:
                                                  '{!join from=parentIdentifier to=identifier}fileContentType:image*',
                                                  'dvObjectType:datasets'], 'start': ['0'], 'rows': ['31'],
                                           'sort': ['title asc']})
+
+    def get_resource_download_times_amount(self, identifier: str):
+        """
+        Method responsible for getting amount of downloaded on each
+        resource based on identifier
+        """
+        download_times = self.__client.download_amount(identifier)
+        if download_times.is_success:
+            return download_times.get_data()
+        return {}

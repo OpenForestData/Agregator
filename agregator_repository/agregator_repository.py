@@ -117,6 +117,7 @@ class AgregatorRepository:
                 response['details']['originalFileFormat'] = files.get(id, "").split('.')[-1]
                 # response['details']['originalFileFormat'] = files
                 response['download_url'] = url_to_download_file
+                response['download_times'] = self.__dataverse_repository.get_resource_download_times_amount(id)
         return response
 
     def get_thumbnail_url(self, file_id: int) -> (str, str):
