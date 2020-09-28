@@ -92,7 +92,7 @@ class DataverseClient:
             response = DataverseClientSearchResponse(False)
         return response
 
-    def download_amount(self, persistent_id: str) -> DataverseClientResponse:
+    def dataset_download_amount(self, persistent_id: str) -> DataverseClientResponse:
         """
         Method responsible for obtaining download amount for each dataset or file
         """

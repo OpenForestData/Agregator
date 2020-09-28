@@ -165,7 +165,7 @@ class DataverseRepository:
         """
         categories = []
         response_from_solr_search = self.__client.search(
-            params={'fq': ["dvObjectType:dataverses"], 'start': ['1'], 'rows': ['15']})
+            params={'fq': ["dvObjectType:dataverses"], 'start': ['0'], 'rows': ['100']})
         for dataverse in response_from_solr_search.get_result():
             categories.append({
                 'id': dataverse['id'],
@@ -263,7 +263,7 @@ class DataverseRepository:
         Method responsible for getting amount of downloaded on each
         resource based on identifier
         """
-        download_times = self.__client.download_amount(identifier)
+        download_times = self.__client.dataset_download_amount(identifier)
         if download_times.is_success:
             return download_times.get_data()
         return {}
