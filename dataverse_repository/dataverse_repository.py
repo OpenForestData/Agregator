@@ -22,13 +22,15 @@ class DataverseRepository:
         # TODO delete backend_cms repository
         self.__cache = CacheManager()
 
-    def __prepare_params(self, params: dict, search_type='datasets', exact=True) -> (str, dict):
+    def __prepare_params(self, params: dict, search_type='datasets', exact=True) -> (
+            str, dict):
         """
         Prepare proper params based on api client
         """
         q = "*"
         final_params = {'fq': ['publicationStatus:Published']}
-        params = dict(copy.deepcopy(params).lists() if isinstance(params, QueryDict) else params)
+        params = dict(
+            copy.deepcopy(params).lists() if isinstance(params, QueryDict) else params)
         # ensure no facet fields sent
         if 'facet.field' in params:
             params.pop('facet.field')
@@ -43,9 +45,16 @@ class DataverseRepository:
             final_params['fq'].append(f'dwcEventTime:{" TO ".join(years)}')
             params.pop('dwcEventTime')
 
+        if 'timePeriodCovered' in params:
+            time_period_covered = params['timePeriodCovered']
+            years = [year[:4] for year in time_period_covered]
+            final_params['fq'].append(f'timePeriodCovered:{" TO ".join(years)}')
+            params.pop('timePeriodCovered')
+
         if 'geographicBoundingBox' in params:
             try:
-                coords = [cord_value.split('_') for cord_value in params['geographicBoundingBox']]
+                coords = [cord_value.split('_') for cord_value in
+                          params['geographicBoundingBox']]
                 # coords_dict = {
                 #     'northLongitude': coords[1][0],
                 #     'westLongitude': coords[0][1],
@@ -70,7 +79,8 @@ class DataverseRepository:
             params.pop('rows')
 
         if 'start' in params:
-            final_params['start'] = [str(int(params['start'][0]) * (int(final_params['rows'][0]) or 15))]
+            final_params['start'] = [
+                str(int(params['start'][0]) * (int(final_params['rows'][0]) or 15))]
             params.pop('start')
 
         if 'category' in params:
@@ -89,7 +99,8 @@ class DataverseRepository:
         media_static = params.get('mediaStatic', None)
         geo_static = params.get('geoStatic', None)
         if media_static:
-            final_params['fq'].append('{!join from=parentIdentifier to=identifier}fileContentType:image*')
+            final_params['fq'].append(
+                '{!join from=parentIdentifier to=identifier}fileContentType:image*')
             params.pop('mediaStatic')
         if geo_static:
             params['dwcDecimalLatitude'] = ["*"]
@@ -103,18 +114,21 @@ class DataverseRepository:
                 new_fquery = f'{key}:"{values}"'
             else:
                 if exact:
-                    new_fquery = f'{key}:' + " OR ".join([f'"{value}"' for value in values])
+                    new_fquery = f'{key}:' + " OR ".join(
+                        [f'"{value}"' for value in values])
                 else:
                     new_fquery = f'{key}:{" OR ".join([f"{value}" for value in values])}'
             final_params['fq'].append(new_fquery)
         return q, final_params
 
-    def search(self, params: dict = None, facet_filterable_fields=[], search_type='datasets', exact=True) -> dict:
+    def search(self, params: dict = None, facet_filterable_fields=[],
+               search_type='datasets', exact=True) -> dict:
         """
         Prepare response with all required elements
         """
         # ensure params are in proper format
-        query, params = self.__prepare_params(params, search_type=search_type, exact=exact)
+        query, params = self.__prepare_params(params, search_type=search_type,
+                                              exact=exact)
 
         # get search params from backend cms
         search_params = {'facet.field': facet_filterable_fields}
@@ -132,7 +146,8 @@ class DataverseRepository:
     @cached
     def get_resource(self, resource_id: str):
 
-        solr_response = self.__client.search("*", {'fq': ['dvObjectType:files', f'entityId:{resource_id}']})
+        solr_response = self.__client.search("*", {
+            'fq': ['dvObjectType:files', f'entityId:{resource_id}']})
         resource = solr_response.get_result()
         if len(resource) > 0:
             return resource[0]
@@ -149,7 +164,8 @@ class DataverseRepository:
             return json_data
         return None
 
-    def get_datasets_details_based_on_identifier_list(self, identifiers_list: list) -> dict:
+    def get_datasets_details_based_on_identifier_list(self,
+                                                      identifiers_list: list) -> dict:
         """
         Method responsible for getting dataset details for search
         """
@@ -187,7 +203,8 @@ class DataverseRepository:
         if metadata_blocks_response.is_success:
             all_metadata_blocks = metadata_blocks_response.get_data()
             for metadata_block in all_metadata_blocks:
-                metadata_blocks[metadata_block['name']] = self.__client.get_metadata_details_for_block(
+                metadata_blocks[metadata_block[
+                    'name']] = self.__client.get_metadata_details_for_block(
                     metadata_block['name']).get_data()
         return metadata_blocks
 
@@ -244,7 +261,8 @@ class DataverseRepository:
         response_metrics_by_category = self.__client.get_metrics_by_category_of_dataverses()
         if response_metrics_by_category.is_success:
             response['datasets_category'] = response_metrics_by_category.get_data()
-        response_metrics_by_subjects = self.__client.get_metrics_by_subject_of_datasets(to_month)
+        response_metrics_by_subjects = self.__client.get_metrics_by_subject_of_datasets(
+            to_month)
         if response_metrics_by_subjects.is_success:
             response['datasets_subject'] = response_metrics_by_subjects.get_data()
         return response or None
@@ -255,7 +273,8 @@ class DataverseRepository:
         """
         return self.__client.search('*', {'fq': ['publicationStatus:Published',
                                                  '{!join from=parentIdentifier to=identifier}fileContentType:image*',
-                                                 'dvObjectType:datasets'], 'start': ['0'], 'rows': ['31'],
+                                                 'dvObjectType:datasets'], 'start': ['0'],
+                                          'rows': ['31'],
                                           'sort': ['title asc']})
 
     def get_resource_download_times_amount(self, identifier: str):
