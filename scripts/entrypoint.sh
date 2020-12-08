@@ -3,6 +3,6 @@
 
 python /app/manage.py collectstatic --noinput
 
-python /app/manage.py buildapp
+
 
 python /app/manage.py runserver 0.0.0.0:8000
