@@ -103,8 +103,8 @@ class DataverseRepository:
                 '{!join from=parentIdentifier to=identifier}fileContentType:image*')
             params.pop('mediaStatic')
         if geo_static:
-            final_params['fq'].append(f'dwcDecimalLatitude:*')
-            final_params['fq'].append(f'dwcDecimalLongitude:*')
+            final_params['fq'].append('dwcDecimalLatitude:*')
+            final_params['fq'].append('dwcDecimalLongitude:*')
             params.pop('geoStatic')
 
         params['dvObjectType'] = [search_type]
