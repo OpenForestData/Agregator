@@ -1,7 +1,7 @@
 from .common import *
 from agregator_ofd.settings import db_config
 
-DEBUG = False
+DEBUG = True
 
 SSL = True
 
